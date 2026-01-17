@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ro">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>QOrienta - Descoperă-ți viitorul</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS with Config -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2bee7c",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#102218",
+                        "brand-blue": "#3b82f6",
+                        "brand-purple": "#8b5cf6",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom gradient blobs for the 'pops of color' */
+        .blob-purple {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(139, 92, 246, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .blob-blue {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-x-hidden antialiased flex flex-col min-h-screen">
+    <!-- Decorative Background Elements (Light Mode Pops) -->
+    <div class="blob-purple top-0 left-0 -translate-x-1/2 -translate-y-1/2 dark:opacity-20"></div>
+    <div class="blob-blue top-[20%] right-0 translate-x-1/3 dark:opacity-20"></div>
+    <!-- Navigation -->
+    <nav
+        class="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-[#234833] bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+        <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="flex h-8 w-8 items-center justify-center rounded bg-primary text-background-dark">
+                        <span class="material-symbols-outlined text-[20px]">explore</span>
+                    </div>
+                    <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">QOrienta</span>
+                </div>
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex flex-1 justify-center gap-8">
+                    <a class="text-sm font-medium text-slate-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition-colors"
+                        href="quiz.html">Test de Orientare</a>
+                    <a class="text-sm font-medium text-slate-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition-colors"
+                        href="#">Resurse</a>
+                    <a class="text-sm font-medium text-slate-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition-colors"
+                        href="pricing.html">Pachete</a>
+                    <a class="text-sm font-medium text-slate-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition-colors"
+                        href="about.html">Despre Noi</a>
+                </div>
+                <!-- Auth Buttons -->
+                <div class="flex items-center gap-4">
+                    <a class="hidden sm:block text-sm font-bold text-slate-700 hover:text-primary dark:text-white dark:hover:text-primary transition-colors"
+                        href="#">Login</a>
+                    <a href="quiz.html"
+                        class="flex h-9 items-center justify-center rounded-lg bg-primary px-4 text-sm font-bold text-[#112218] transition-transform hover:scale-105 hover:bg-[#25d36d]">
+                        Începe Acum
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <div class="relative w-full pt-12 pb-16 lg:pt-20 lg:pb-24">
+        <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row gap-12 items-center">
+                <!-- Text Content -->
+                <div class="flex-1 flex flex-col gap-6 text-center lg:text-left z-10">
+                    <div
+                        class="inline-flex items-center gap-2 self-center lg:self-start rounded-full border border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-900/30 px-3 py-1 text-xs font-semibold text-blue-600 dark:text-blue-300">
+                        <span class="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span>
+                        Nou: Mentori din IT &amp; Marketing
+                    </div>
+                    <h1
+                        class="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight text-slate-900 dark:text-white">
+                        Descoperă-ți <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-brand-purple">viitorul</span>
+                        profesional.
+                    </h1>
+                    <p class="text-lg text-slate-600 dark:text-gray-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                        Nu știi ce facultate să alegi? QOrienta este platforma ta de ghidare în carieră. Găsește drumul
+                        potrivit cu teste personalizate și sfaturi de la experți.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
+                        <a href="quiz.html"
+                            class="flex h-12 min-w-[160px] items-center justify-center rounded-xl bg-primary px-6 text-base font-bold text-[#112218] shadow-lg shadow-primary/25 transition-all hover:shadow-primary/40 hover:-translate-y-1">
+                            Începe Testul Gratuit
+                        </a>
+                        <button
+                            class="flex h-12 min-w-[160px] items-center justify-center rounded-xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-white/5 px-6 text-base font-bold text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-white/10 transition-colors">
+                            Vezi cum funcționează
+                        </button>
+                    </div>
+                    <div
+                        class="flex items-center justify-center lg:justify-start gap-4 pt-4 text-sm text-slate-500 dark:text-gray-400">
+                        <div class="flex -space-x-2">
+                            <div class="h-8 w-8 rounded-full border-2 border-white dark:border-[#102218] bg-gray-200 bg-cover bg-center"
+                                data-alt="Portrait of a young student"
+                                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAIj48nrhBdKq_Wb-ZUsWh2wTH_ETa8NqYbcoBY7ZrqDKoqjufQrnIHgVdlft0aq0AE5FeYZa0owImq3ovUYLAGM8bhcfJHSJ7RNyO0sjp3IzuZVq1wdiQMx-iHVRcpQefi9lKO4Z3h1pfdANGc01J295V3yPbGWpKGnWyBRVNXI1VwzRkFrDBOl5TydmnUHyRswBb5WCa7UVwpJrZlJD3_2P1257q26dy05gk6uwrJpA8mR4WnaTD95w9otYBYXR-YI20pptmFk3s');">
+                            </div>
+                            <div class="h-8 w-8 rounded-full border-2 border-white dark:border-[#102218] bg-gray-200 bg-cover bg-center"
+                                data-alt="Portrait of a smiling teenager"
+                                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDYSYZwQpWfuk7P5r_TeBYo1sIsQbmsDDJwblvxAl0e0Hb405d7ZhNT8ZfjiqI2HFbxb7RK8DD94tf3UqRP9iBh6fw1MBXlYOrmLkgWMrbjXhFB8JmV191d94zXUSV75nRZ38zb2hj3afWfG_kAKC_AMwtCx27Zk-tFRsoYEpuzF-clE9m6NQu3ytSj-UGasoYawdn-GQXcMRq2TbT-01i_U9S9FjbvSWDTWxMesnE78_Zk7X_khJZ5rXYI-iCv5aY6Bjzwy5m2lQY');">
+                            </div>
+                            <div class="h-8 w-8 rounded-full border-2 border-white dark:border-[#102218] bg-gray-200 bg-cover bg-center"
+                                data-alt="Portrait of a happy girl"
+                                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAkZE1FHHd8odCWGAJ4rWW2SmS40nJO2GsLg3vJr2BGjtfUv-3VRBdXoiKVa-2G9TXyWRCRux8k7UYHnwYkL8seqad0EerWEPqiRqStRO43LrjzetUzMrZPw57q4V784mdAg4e9ZBkEFuT69Es_G24v71-7fdFkyzTYj-HypLIFCLhDpoNVv-L3ku6bIhSHEKXr3zbiU-T9lApGPbSbVX_YgZ-v1Ug9lG06qpTuUijp9aQagaJ6igVijp7Ay7xXaHREAR8cCMvY2Kg');">
+                            </div>
+                        </div>
+                        <p>Folosit deja de <span class="font-bold text-slate-900 dark:text-white">2,500+</span> elevi
+                        </p>
+                    </div>
+                </div>
+                <!-- Image/Visual -->
+                <div class="flex-1 w-full max-w-[600px] lg:max-w-none relative">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-tr from-brand-blue/20 to-primary/20 rounded-2xl blur-2xl -z-10 dark:opacity-40">
+                    </div>
+                    <div class="rounded-2xl overflow-hidden shadow-2xl border border-slate-100 dark:border-gray-800 bg-white dark:bg-[#193324] aspect-[4/3] w-full bg-cover bg-center relative group"
+                        data-alt="Group of diverse teenagers studying together outdoors looking happy"
+                        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAoG31Sbr_dUYzyf7B2yBgIDaz-ayyRgBhCLSAo4zvn6C9tirKoDCtb449v-07W4e-PaJbR3HFCjMpzbaqA66NPrWXDzo0c6obTIK4_O6Ge6WeenJUDwY9pWEEECCGTE6LdCrtv0n9eAiK8PX_SG3pdJXU-ZPZ0fmsMbJWergIzbLuAC--5Ac7GbyJ6evS0vLIghgsPZqwAKtV1NEOcnlqJlkmY-xJirueqHN12gZdhxqo7r73yleA4QeJ-3FjDwuGH46bnHhgzBoc');">
+                        <!-- Overlay UI Mockup -->
+                        <div
+                            class="absolute bottom-6 left-6 right-6 bg-white/90 dark:bg-[#112218]/90 backdrop-blur p-4 rounded-xl border border-white/20 shadow-lg translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="material-symbols-outlined text-brand-purple">psychology</span>
+                                <span class="text-sm font-bold text-slate-800 dark:text-white">Rezultat
+                                    Compatibilitate</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+                                <div
+                                    class="bg-gradient-to-r from-brand-blue to-brand-purple h-full w-[85%] rounded-full">
+                                </div>
+                            </div>
+                            <div
+                                class="flex justify-between mt-2 text-xs font-medium text-slate-500 dark:text-gray-400">
+                                <span>Marketing Digital</span>
+                                <span class="text-brand-purple">85% Match</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Features Section -->
+    <section class="py-16 bg-white dark:bg-[#112218]/50 relative overflow-hidden">
+        <!-- Background decoration -->
+        <div
+            class="absolute right-0 top-0 w-1/3 h-full bg-gradient-to-l from-slate-50 to-transparent dark:from-[#152e22] dark:to-transparent -z-10">
+        </div>
+        <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row gap-12">
+                <!-- Header -->
+                <div class="md:w-1/3 flex flex-col gap-4">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white leading-tight">
+                        De ce să alegi <br /><span class="text-primary">QOrienta?</span>
+                    </h2>
+                    <p class="text-slate-600 dark:text-gray-400 leading-relaxed">
+                        Te ajutăm să iei decizii informate pentru viitorul tău prin tehnologie avansată și mentorat
+                        uman. Nu ești singur în această călătorie.
+                    </p>
+                    <a class="inline-flex items-center gap-2 text-brand-blue font-bold hover:gap-3 transition-all mt-2"
+                        href="#">
+                        Vezi toate beneficiile
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </a>
+                </div>
+                <!-- Cards Grid -->
+                <div class="md:w-2/3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Card 1 -->
+                    <div
+                        class="group p-6 rounded-2xl bg-background-light dark:bg-[#193324] border border-slate-200 dark:border-[#326748] hover:border-primary/50 transition-colors shadow-sm hover:shadow-md">
+                        <div
+                            class="h-12 w-12 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-[28px]">psychology</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Testare Personalizată</h3>
+                        <p class="text-sm text-slate-600 dark:text-[#92c9a9]">
+                            Algoritmi smart care te înțeleg și îți propun cele mai bune opțiuni bazate pe personalitatea
+                            ta.
+                        </p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div
+                        class="group p-6 rounded-2xl bg-background-light dark:bg-[#193324] border border-slate-200 dark:border-[#326748] hover:border-primary/50 transition-colors shadow-sm hover:shadow-md">
+                        <div
+                            class="h-12 w-12 rounded-lg bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-300 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-[28px]">verified_user</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Sfaturi de la Experți</h3>
+                        <p class="text-sm text-slate-600 dark:text-[#92c9a9]">
+                            Acces direct la mentori din industrii reale care te pot ghida pas cu pas spre succes.
+                        </p>
+                    </div>
+                    <!-- Card 3 -->
+                    <div
+                        class="group p-6 rounded-2xl bg-background-light dark:bg-[#193324] border border-slate-200 dark:border-[#326748] hover:border-primary/50 transition-colors shadow-sm hover:shadow-md">
+                        <div
+                            class="h-12 w-12 rounded-lg bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-300 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-[28px]">trending_up</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Insight-uri Industrie</h3>
+                        <p class="text-sm text-slate-600 dark:text-[#92c9a9]">
+                            Află ce joburi sunt la mare căutare și cum va arăta piața muncii în următorii 5-10 ani.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Timeline / Process Section -->
+    <section class="py-16 md:py-24 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Cum funcționează?</h2>
+            <p class="text-slate-600 dark:text-gray-400 mt-2">Trei pași simpli către cariera visurilor tale</p>
+        </div>
+        <div class="relative">
+            <!-- Connecting Line (Desktop) -->
+            <div
+                class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-slate-200 dark:bg-[#326748] -translate-y-1/2 z-0">
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+                <!-- Step 1 -->
+                <div class="flex flex-col items-center text-center">
+                    <div
+                        class="w-16 h-16 rounded-full bg-white dark:bg-[#112218] border-4 border-primary flex items-center justify-center mb-4 shadow-lg">
+                        <span class="material-symbols-outlined text-primary text-[32px]">quiz</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">1. Fă Testul</h3>
+                    <p class="text-slate-600 dark:text-[#92c9a9] text-sm max-w-[200px]">Răspunde la întrebări simple
+                        despre pasiunile tale. Durează doar 10 minute.</p>
+                </div>
+                <!-- Step 2 -->
+                <div class="flex flex-col items-center text-center">
+                    <div
+                        class="w-16 h-16 rounded-full bg-white dark:bg-[#112218] border-4 border-brand-blue flex items-center justify-center mb-4 shadow-lg">
+                        <span class="material-symbols-outlined text-brand-blue text-[32px]">assignment</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">2. Vezi Raportul</h3>
+                    <p class="text-slate-600 dark:text-[#92c9a9] text-sm max-w-[200px]">Primești instant un profil
+                        detaliat cu meseriile care ți se potrivesc.</p>
+                </div>
+                <!-- Step 3 -->
+                <div class="flex flex-col items-center text-center">
+                    <div
+                        class="w-16 h-16 rounded-full bg-white dark:bg-[#112218] border-4 border-brand-purple flex items-center justify-center mb-4 shadow-lg">
+                        <span class="material-symbols-outlined text-brand-purple text-[32px]">rocket_launch</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">3. Planifică Viitorul</h3>
+                    <p class="text-slate-600 dark:text-[#92c9a9] text-sm max-w-[200px]">Discută cu un mentor și alege
+                        facultatea potrivită pentru tine.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="py-16 bg-white dark:bg-[#112218]">
+        <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">Cunoaște echipa</h2>
+                <p class="text-slate-600 dark:text-gray-400 max-w-3xl mx-auto">
+                    Cu un mix de cunoștințe din psihologia organizațională, despre cum se integrează tinerii cu adevărat
+                    într-o firmă până la tehnici militare pe care le putem integra zi de zi în viața noastră, noi
+                    suntem:
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Member 1: Sergiu -->
+                <a href="team.html?member=sergiu"
+                    class="bg-white dark:bg-[#193324] rounded-2xl shadow-lg border border-slate-100 dark:border-[#326748] overflow-hidden flex flex-col items-center text-center p-8 transition-transform hover:-translate-y-1 hover:shadow-xl group">
+                    <div
+                        class="w-32 h-32 rounded-full bg-slate-200 dark:bg-slate-700 mb-6 flex items-center justify-center overflow-hidden">
+                        <img src="ursan.jpeg" alt="Sergiu Ursan"
+                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                    </div>
+                    <p class="text-xs font-bold tracking-wider text-primary uppercase mb-2">Psiholog & Recruiter</p>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Sergiu URSAN</h3>
+                    <p class="text-sm text-slate-600 dark:text-gray-300 italic">
+                        "Lucrez cu oameni care au în ei mai mult decât știu... și sunt gata să afle ce."
+                    </p>
+                </a>
+
+                <!-- Member 2: Alexandru -->
+                <a href="team.html?member=alexandru"
+                    class="bg-white dark:bg-[#193324] rounded-2xl shadow-lg border border-slate-100 dark:border-[#326748] overflow-hidden flex flex-col items-center text-center p-8 transition-transform hover:-translate-y-1 hover:shadow-xl group">
+                    <div
+                        class="w-32 h-32 rounded-full bg-slate-200 dark:bg-slate-700 mb-6 flex items-center justify-center overflow-hidden">
+                        <img src="zarojanu.jpeg" alt="Alexandru Gabriel Zarojanu"
+                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                    </div>
+                    <p class="text-xs font-bold tracking-wider text-primary uppercase mb-2">Psihoterapeut</p>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Alexandru Gabriel ZAROJANU</h3>
+                    <p class="text-sm text-slate-600 dark:text-gray-300 italic">
+                        "Fiecare tânăr e o poveste în curs de scriere. Eu îl ajut să o citească mai clar."
+                    </p>
+                </a>
+
+                <!-- Member 3: Costel -->
+                <a href="team.html?member=costel"
+                    class="bg-white dark:bg-[#193324] rounded-2xl shadow-lg border border-slate-100 dark:border-[#326748] overflow-hidden flex flex-col items-center text-center p-8 transition-transform hover:-translate-y-1 hover:shadow-xl group">
+                    <div
+                        class="w-32 h-32 rounded-full bg-slate-200 dark:bg-slate-700 mb-6 flex items-center justify-center overflow-hidden">
+                        <img src="padurean.jpg" alt="Costel Codruț Padurean"
+                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                    </div>
+                    <p class="text-xs font-bold tracking-wider text-primary uppercase mb-2">Engagement Curator</p>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Costel Codruț PADUREAN</h3>
+                    <p class="text-sm text-slate-600 dark:text-gray-300 italic">
+                        "Dacă noi construim direcția și claritatea, Codruț creează mișcare în jurul ei."
+                    </p>
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- Reviews Section -->
+    <section class="py-16 bg-slate-50 dark:bg-[#0d1a12]">
+        <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-10 text-center">Ce spun elevii despre noi
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Review 1 -->
+                <div
+                    class="bg-white dark:bg-[#193324] p-6 rounded-xl shadow-sm flex flex-col gap-4 border border-transparent dark:border-[#326748]">
+                    <div class="flex items-center gap-3">
+                        <div class="h-10 w-10 rounded-full bg-cover bg-center" data-alt="Avatar of Ana M."
+                            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBHEV1huQ1pbiokOqFTLcPmcV0PVxFgO40m8EQDx5KaxvEFS_Jl7CkjS_E2M8EC8F1Ml713Mb8EYwnhK4SMciGF7kTofuMCtmbHRPwvSCSd0lk1cyFDQETHbJHA4RUEYIcH4iBQ5mfMHiwxzh-KU7bPdTg9uYHgMU56cL7rmW-9aRrLcCL_TalBWOi3ZDEa4d53XaNLXGKCGYmb3HjEbZvCUcRLBuJ-zCuEa2UBbk6aN0jWM5kZGRlNL1ZFuYtRAVL-s9CYi9Cseq4');">
+                        </div>
+                        <div>
+                            <p class="text-slate-900 dark:text-white font-bold text-sm">Ana M.</p>
+                            <div class="flex text-yellow-400 text-[16px]">
+                                <span class="material-symbols-outlined fill-current"
+                                    style="font-variation-settings: 'FILL' 1">star</span>
+                                <span class="material-symbols-outlined fill-current"
+                                    style="font-variation-settings: 'FILL' 1">star</span>
+                                <span class="material-symbols-outlined fill-current"
+                                    style="font-variation-settings: 'FILL' 1">star</span>
+                                <span class="material-symbols-outlined fill-current"
+                                    style="font-variation-settings: 'FILL' 1">star</span>
+                                <span class="material-symbols-outlined fill-current"
+                                    style="font-variation-settings: 'FILL' 1">star</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 dark:text-gray-300 text-sm italic">"M-a ajutat enorm să îmi dau seama ce
+                        facultate să aleg. Eram foarte confuză înainte, dar testul mi-a clarificat opțiunile. Recomand
+                        cu drag!"</p>
+                </div>
+                <!-- Review 2 -->
+                <div
+                    class="bg-white dark:bg-[#193324] p-6 rounded-xl shadow-sm flex flex-col gap-4 border border-transparent dark:border-[#326748]">
+                    <div class="flex items-center gap-3">
+                        <div class="h-10 w-10 rounded-full bg-cover bg-center" data-alt="Avatar of Andrei P."
+                            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB_PGiw62KOtMU6eghJhgbtQMo1EbLI7iKDXtMbKGt_fYEoQ7t-HSof813FDzAOyK2NagWl48ahifn0ckB74nBs2EZDX7o7dcKOAs6NKeAAKmOwIE3pzUDwrC_tMxXaW-fnBv0HzPTkafbJtOpF6O6uVhbIgkQrkPseaMaZFphTWHkMJgfTAiXsaPfMTpjcoLtgSs97aqPAwcbZSY1K8vm4z_2ibWNUK0Y28u-jPNO7LwMaZBQHPlI_5Vr7PBa85yK1kMq4YSvO6a4');">
+                        </div>
+                        <div>
+                            <p class="text-slate-900 dark:text-white font-bold text-sm">Andrei P.</p>
+                            <div class="flex text-yellow-400 text-[16px]">
+                                <span class="material-symbols-outlined fill-current"
+                                    style="font-variation-settings: 'FILL' 1">star</span>
+                                <span class="material-symbols-outlined fill-current"
+                                    style="font-variation-settings: 'FILL' 1">star</span>
+                                <span class="material-symbols-outlined fill-current"
+                                    style="font-variation-settings: 'FILL' 1">star</span>
+                                <span class="material-symbols-outlined fill-current"
+                                    style="font-variation-settings: 'FILL' 1">star</span>
+                                <span class="material-symbols-outlined fill-current"
+                                    style="font-variation-settings: 'FILL' 1">star</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 dark:text-gray-300 text-sm italic">"Designul e super cool și testul a fost
+                        chiar distractiv de făcut. Nu m-am plictisit deloc, iar rezultatele au fost surprinzător de
+                        precise."</p>
+                </div>
+                <!-- Review 3 -->
+                <div
+                    class="bg-white dark:bg-[#193324] p-6 rounded-xl shadow-sm flex flex-col gap-4 border border-transparent dark:border-[#326748]">
+                    <div class="flex items-center gap-3">
+                        <div class="h-10 w-10 rounded-full bg-cover bg-center" data-alt="Avatar of Elena S."
+                            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA28KsWzyXnTAMTVVaFuaGaoQaxt2RtL058tY2y0kNK5fT0-VcWWfga-f1d4rdWdhYymwmH6ynDD92fAqwrBFK-YpNiODXHO0ElLFtd27qbBrRCStFs6xNIyZIxSmSImBQ0eCUDZXb5CG3RQp2wkf1HYLaPY6fvWLUPDoBQI-xEm05-Dv20aLho6j1jmjJ0s2HVCFU-a3O8Uxep3pmM7AkRAPCps4UadLECEIhGOCH__xHn3ZRFUUMUKPQ22jnRRA1yZP-gwV9a-sY');">
+                        </div>
+                        <div>
+                            <p class="text-slate-900 dark:text-white font-bold text-sm">Elena S.</p>
+                            <div class="flex text-yellow-400 text-[16px]">
+                                <span class="material-symbols-outlined fill-current"
+                                    style="font-variation-settings: 'FILL' 1">star</span>
+                                <span class="material-symbols-outlined fill-current"
+                                    style="font-variation-settings: 'FILL' 1">star</span>
+                                <span class="material-symbols-outlined fill-current"
+                                    style="font-variation-settings: 'FILL' 1">star</span>
+                                <span class="material-symbols-outlined fill-current"
+                                    style="font-variation-settings: 'FILL' 1">star</span>
+                                <span class="material-symbols-outlined"
+                                    style="font-variation-settings: 'FILL' 0">star</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 dark:text-gray-300 text-sm italic">"Sfaturile mentorilor mi-au deschis
+                        ochii despre ce înseamnă marketingul. Am avut o sesiune video super utilă."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-gray-200 dark:border-[#234833] bg-white dark:bg-[#102218] pt-12 pb-8">
+        <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="flex h-6 w-6 items-center justify-center rounded bg-primary text-background-dark">
+                            <span class="material-symbols-outlined text-[14px]">explore</span>
+                        </div>
+                        <span class="text-lg font-bold text-slate-900 dark:text-white">QOrienta</span>
+                    </div>
+                    <p class="text-slate-500 dark:text-gray-400 text-sm leading-relaxed">
+                        Ghidăm tinerii către cariere de succes prin tehnologie, educație și comunitate.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-4">Platformă</h4>
+                    <ul class="space-y-2 text-sm text-slate-500 dark:text-gray-400">
+                        <li><a class="hover:text-primary transition-colors" href="#">Test Vocacional</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="#">Mentori</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="#">Prețuri</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-4">Resurse</h4>
+                    <ul class="space-y-2 text-sm text-slate-500 dark:text-gray-400">
+                        <li><a class="hover:text-primary transition-colors" href="#">Blog</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="#">Ghid Facultăți</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="#">Webinarii</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm text-slate-500 dark:text-gray-400">
+                        <li><a class="hover:text-primary transition-colors" href="#">Termeni și condiții</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="#">Confidențialitate</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div
+                class="border-t border-gray-100 dark:border-[#234833] pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p class="text-xs text-slate-400 dark:text-gray-500">© 2023 QOrienta. Toate drepturile rezervate.</p>
+                <div class="flex gap-4">
+                    <a class="text-slate-400 hover:text-primary dark:text-gray-500 transition-colors" href="#">
+                        <span class="sr-only">Facebook</span>
+                        <svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewbox="0 0 24 24">
+                            <path clip-rule="evenodd"
+                                d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                                fill-rule="evenodd"></path>
+                        </svg>
+                    </a>
+                    <a class="text-slate-400 hover:text-primary dark:text-gray-500 transition-colors" href="#">
+                        <span class="sr-only">Instagram</span>
+                        <svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewbox="0 0 24 24">
+                            <path clip-rule="evenodd"
+                                d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772 4.902 4.902 0 011.772-1.153c.636-.247 1.363-.416 2.427-.465C9.673 2.013 10.03 2 12.315 2zm-1.082 2.66c-2.41 0-2.716.01-3.66.053-.94.044-1.452.204-1.792.336a2.91 2.91 0 00-1.08.704 2.91 2.91 0 00-.704 1.08c-.132.34-.292.852-.336 1.792-.043.944-.053 1.25-.053 3.66 0 2.41.01 2.716.053 3.66.044.94.204 1.452.336 1.792.205.526.476.944.878 1.346.402.402.82.673 1.346.878.34.132.852.292 1.792.336.944.043 1.25.053 3.66.053 2.41 0 2.716-.01 3.66-.053.94-.044 1.452-.204 1.792-.336a2.91 2.91 0 001.08-.704 2.91 2.91 0 00.704-1.08c.132-.34.292-.852.336-1.792.043-.944.053-1.25.053-3.66 0-2.41-.01-2.716-.053-3.66-.044-.94-.204-1.452-.336-1.792a2.91 2.91 0 00-.878-1.346 2.91 2.91 0 00-1.346-.878c-.34-.132-.852-.292-1.792-.336-.944-.043-1.25-.053-3.66-.053zm3.763 6.671a4.346 4.346 0 11-5.366-5.366 4.346 4.346 0 015.366 5.366zm-4.103-4.103a2.56 2.56 0 103.116 3.116 2.56 2.56 0 00-3.116-3.116zm5.334-3.56a1.188 1.188 0 11-1.68 1.68 1.188 1.188 0 011.68-1.68z"
+                                fill-rule="evenodd"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

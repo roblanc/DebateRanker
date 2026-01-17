@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html class="light" lang="ro">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Echipa QOrienta</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2bee7c",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#102218",
+                        "brand-blue": "#3b82f6",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body
+    class="bg-white dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-x-hidden antialiased flex flex-col min-h-screen">
+
+    <!-- Navigation (Copied from index.html) -->
+    <nav
+        class="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-[#234833] bg-white/80 dark:bg-background-dark/80 backdrop-blur-md">
+        <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 items-center justify-between">
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center gap-3">
+                    <div class="flex h-8 w-8 items-center justify-center rounded bg-primary text-background-dark">
+                        <span class="material-symbols-outlined text-[20px]">explore</span>
+                    </div>
+                    <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">QOrienta</span>
+                </a>
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex flex-1 justify-center gap-8">
+                    <a class="text-sm font-medium text-slate-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition-colors"
+                        href="index.html">Acasă</a>
+                    <a class="text-sm font-medium text-slate-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition-colors"
+                        href="#">Resurse</a>
+                    <a class="text-sm font-medium text-slate-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition-colors"
+                        href="#">Consiliere</a>
+                    <a class="text-sm font-medium text-slate-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition-colors"
+                        href="#">Despre Noi</a>
+                </div>
+                <!-- Auth Buttons -->
+                <div class="flex items-center gap-4">
+                    <a class="hidden sm:block text-sm font-bold text-slate-700 hover:text-primary dark:text-white dark:hover:text-primary transition-colors"
+                        href="#">Login</a>
+                    <a href="quiz.html"
+                        class="flex h-9 items-center justify-center rounded-lg bg-primary px-4 text-sm font-bold text-[#112218] transition-transform hover:scale-105 hover:bg-[#25d36d]">
+                        Începe Acum
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="h-8 md:h-12"></div>
+
+    <!-- Main Content -->
+    <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 flex-grow w-full">
+        <div class="flex flex-col md:flex-row gap-12 lg:gap-24">
+
+            <!-- Sidebar Navigation -->
+            <div class="w-full md:w-1/4 flex flex-col gap-2">
+                <button onclick="showProfile('sergiu')" id="nav-sergiu"
+                    class="text-left px-4 py-3 rounded-lg hover:bg-slate-50 dark:hover:bg-white/5 transition-colors flex items-center gap-3 group border-l-4 border-transparent">
+                    <span class="material-symbols-outlined text-slate-400 group-hover:text-brand-blue">person</span>
+                    <span
+                        class="font-bold text-slate-700 dark:text-gray-200 group-hover:text-brand-blue transition-colors">Sergiu
+                        URSAN</span>
+                </button>
+                <button onclick="showProfile('alexandru')" id="nav-alexandru"
+                    class="text-left px-4 py-3 rounded-lg hover:bg-slate-50 dark:hover:bg-white/5 transition-colors flex items-center gap-3 group border-l-4 border-transparent">
+                    <span class="material-symbols-outlined text-slate-400 group-hover:text-brand-blue">person</span>
+                    <span
+                        class="font-bold text-slate-700 dark:text-gray-200 group-hover:text-brand-blue transition-colors">Alexandru
+                        Gabriel ZAROJANU</span>
+                </button>
+                <button onclick="showProfile('costel')" id="nav-costel"
+                    class="text-left px-4 py-3 rounded-lg hover:bg-slate-50 dark:hover:bg-white/5 transition-colors flex items-center gap-3 group border-l-4 border-transparent">
+                    <span class="material-symbols-outlined text-slate-400 group-hover:text-brand-blue">person</span>
+                    <span
+                        class="font-bold text-slate-700 dark:text-gray-200 group-hover:text-brand-blue transition-colors">Costel
+                        Codruț PADUREAN</span>
+                </button>
+            </div>
+
+            <!-- Profile Content Area -->
+            <div class="flex-1 w-full md:w-3/4">
+
+                <!-- Sergiu Profile -->
+                <div id="profile-sergiu" class="profile-section hidden animate-[fadeIn_0.5s_ease-out]">
+                    <div class="flex flex-col md:flex-row gap-8 mb-10">
+                        <div class="w-full md:w-1/3 aspect-square bg-slate-200 rounded-lg overflow-hidden">
+                            <img src="ursan.jpeg" alt="Sergiu Ursan" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1 flex flex-col justify-center">
+                            <p class="text-slate-500 dark:text-gray-400 text-lg mb-2 leading-tight">Psiholog specializat
+                                în integrarea pe piața muncii a tinerilor</p>
+                            <h2 class="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-6">Sergiu URSAN
+                            </h2>
+                            <p
+                                class="text-xl text-slate-700 dark:text-gray-200 italic border-l-4 border-brand-blue pl-4">
+                                "Lucrez cu oameni care au în ei mai mult decât știu... și sunt gata să afle ce."
+                            </p>
+                            <div class="flex flex-wrap gap-2 mt-6">
+                                <span
+                                    class="px-3 py-1 bg-slate-100 dark:bg-white/10 rounded-full text-xs font-bold text-slate-600 dark:text-gray-300">Anxietate</span>
+                                <span
+                                    class="px-3 py-1 bg-slate-100 dark:bg-white/10 rounded-full text-xs font-bold text-slate-600 dark:text-gray-300">Stress</span>
+                                <span
+                                    class="px-3 py-1 bg-slate-100 dark:bg-white/10 rounded-full text-xs font-bold text-slate-600 dark:text-gray-300">Burnout</span>
+                                <span
+                                    class="px-3 py-1 bg-slate-100 dark:bg-white/10 rounded-full text-xs font-bold text-slate-600 dark:text-gray-300">Atacuri
+                                    de panică</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="prose dark:prose-invert max-w-none text-slate-600 dark:text-gray-300 leading-relaxed">
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Despre</h3>
+                        <p class="mb-4">
+                            Cu o experiență vastă în recrutare și psihologie organizațională, Sergiu înțelege nu doar ce
+                            caută angajatorii, ci și ce îi motivează cu adevărat pe tineri. Abordarea sa este
+                            pragmatică, concentrată pe rezultate, dar întotdeauna umană.
+                        </p>
+                        <p>
+                            El crede că fiecare persoană are un potențial unic care așteaptă să fie activat. Prin
+                            sesiunile sale, Sergiu ajută tinerii să își depășească blocajele mentale, fie că este vorba
+                            de sindromul impostorului, frica de eșec sau lipsa de încredere în propriile forțe.
+                        </p>
+                    </div>
+
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 pt-12 border-t border-gray-100 dark:border-[#234833]">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-brand-blue">school</span>
+                                Educație & Certificări
+                            </h3>
+                            <ul class="space-y-3 text-sm text-slate-600 dark:text-gray-400">
+                                <li class="flex items-start gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary mt-2"></span>
+                                    <span>Master în Psihologie Organizațională - Universitatea București</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary mt-2"></span>
+                                    <span>Certificare în Consiliere Vocațională (GCDF)</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary mt-2"></span>
+                                    <span>Formare în Terapie Cognitiv Comportamentală</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-brand-blue">psychology</span>
+                                Cum lucrez?
+                            </h3>
+                            <p class="text-sm text-slate-600 dark:text-gray-400 leading-relaxed mb-6">
+                                Nu cred în rețete standard. Îmbin testele psihologice validate științific cu discuții
+                                libere, pentru a crea un profil complet al personalității tale. Scopul meu este să îți
+                                ofer claritate, nu doar o listă de joburi.
+                            </p>
+                            <button
+                                class="w-full flex h-12 items-center justify-center rounded-xl bg-slate-900 dark:bg-white px-6 text-base font-bold text-white dark:text-[#102218] transition-all hover:bg-brand-blue hover:text-white hover:-translate-y-1 shadow-lg">
+                                Programează o sesiune cu Sergiu
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alexandru Profile -->
+                <div id="profile-alexandru" class="profile-section hidden animate-[fadeIn_0.5s_ease-out]">
+                    <div class="flex flex-col md:flex-row gap-8 mb-10">
+                        <div class="w-full md:w-1/3 aspect-square bg-slate-200 rounded-lg overflow-hidden">
+                            <img src="zarojanu.jpeg" alt="Alexandru Zarojanu" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1 flex flex-col justify-center">
+                            <p class="text-slate-500 dark:text-gray-400 text-lg mb-2 leading-tight">Psiholog clinician
+                                și psihoterapeut</p>
+                            <h2 class="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-6">Alexandru
+                                ZAROJANU</h2>
+                            <p
+                                class="text-xl text-slate-700 dark:text-gray-200 italic border-l-4 border-brand-blue pl-4">
+                                "Fiecare tânăr e o poveste în curs de scriere. Eu îl ajut să o citească mai clar."
+                            </p>
+                            <div class="flex flex-wrap gap-2 mt-6">
+                                <span
+                                    class="px-3 py-1 bg-slate-100 dark:bg-white/10 rounded-full text-xs font-bold text-slate-600 dark:text-gray-300">Dezvoltare
+                                    Personală</span>
+                                <span
+                                    class="px-3 py-1 bg-slate-100 dark:bg-white/10 rounded-full text-xs font-bold text-slate-600 dark:text-gray-300">Psihoterapie</span>
+                                <span
+                                    class="px-3 py-1 bg-slate-100 dark:bg-white/10 rounded-full text-xs font-bold text-slate-600 dark:text-gray-300">Consiliere</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="prose dark:prose-invert max-w-none text-slate-600 dark:text-gray-300 leading-relaxed">
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Despre</h3>
+                        <p class="mb-4">
+                            Alexandru aduce profunzimea clinică în ecuație. El se asigură că alegerile de carieră sunt
+                            aliniate nu doar cu abilitățile, ci și cu sănătatea emoțională a fiecărui tânăr.
+                        </p>
+                        <p>
+                            Într-o lume plină de presiune, el oferă un spațiu sigur unde tinerii pot explora cine sunt
+                            cu adevărat, dincolo de așteptările celor din jur. Alexandru este ghidul care te ajută să
+                            navighezi prin incertitudine cu claritate și calm.
+                        </p>
+                    </div>
+
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 pt-12 border-t border-gray-100 dark:border-[#234833]">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-brand-blue">school</span>
+                                Educație & Certificări
+                            </h3>
+                            <ul class="space-y-3 text-sm text-slate-600 dark:text-gray-400">
+                                <li class="flex items-start gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary mt-2"></span>
+                                    <span>Formare în Psihoterapie Integrativă</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary mt-2"></span>
+                                    <span>Master Psihologie Clinică</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary mt-2"></span>
+                                    <span>Specializare în terapia anxietății la adolescenți</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-brand-blue">psychology</span>
+                                Cum lucrez?
+                            </h3>
+                            <p class="text-sm text-slate-600 dark:text-gray-400 leading-relaxed mb-6">
+                                Abordarea mea este una de explorare profundă dar blândă. Creăm împreună un spațiu de
+                                siguranță unde poți vorbi despre fricile tale legate de viitor fără a fi judecat. Te
+                                ajut să transformi anxietatea în entuziasm.
+                            </p>
+                            <button
+                                class="w-full flex h-12 items-center justify-center rounded-xl bg-slate-900 dark:bg-white px-6 text-base font-bold text-white dark:text-[#102218] transition-all hover:bg-brand-blue hover:text-white hover:-translate-y-1 shadow-lg">
+                                Programează o sesiune cu Alexandru
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Costel Profile -->
+                <div id="profile-costel" class="profile-section hidden animate-[fadeIn_0.5s_ease-out]">
+                    <div class="flex flex-col md:flex-row gap-8 mb-10">
+                        <div class="w-full md:w-1/3 aspect-square bg-slate-200 rounded-lg overflow-hidden">
+                            <img src="padurean.jpg" alt="Costel Padurean" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1 flex flex-col justify-center">
+                            <p class="text-slate-500 dark:text-gray-400 text-lg mb-2 leading-tight">Engagement &
+                                Connection Curator</p>
+                            <h2 class="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-6">Costel
+                                PADUREAN</h2>
+                            <p
+                                class="text-xl text-slate-700 dark:text-gray-200 italic border-l-4 border-brand-blue pl-4">
+                                "Dacă noi construim direcția și claritatea, Codruț creează mișcare în jurul ei."
+                            </p>
+                            <div class="flex flex-wrap gap-2 mt-6">
+                                <span
+                                    class="px-3 py-1 bg-slate-100 dark:bg-white/10 rounded-full text-xs font-bold text-slate-600 dark:text-gray-300">Community</span>
+                                <span
+                                    class="px-3 py-1 bg-slate-100 dark:bg-white/10 rounded-full text-xs font-bold text-slate-600 dark:text-gray-300">Engagement</span>
+                                <span
+                                    class="px-3 py-1 bg-slate-100 dark:bg-white/10 rounded-full text-xs font-bold text-slate-600 dark:text-gray-300">Leadership</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="prose dark:prose-invert max-w-none text-slate-600 dark:text-gray-300 leading-relaxed">
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Despre</h3>
+                        <p class="mb-4">
+                            Costel este energia din spatele comunității. El știe cum să conecteze oamenii și să creeze
+                            oportunități acolo unde alții văd doar obstacole.
+                        </p>
+                        <p>
+                            Cu un background divers și o carismă naturală, el se asigură că fiecare tânăr care intră în
+                            programul nostru se simte văzut, auzit și susținut. El transformă teoria în acțiune și
+                            planurile în realitate.
+                        </p>
+                    </div>
+
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 pt-12 border-t border-gray-100 dark:border-[#234833]">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-brand-blue">school</span>
+                                Educație & Certificări
+                            </h3>
+                            <ul class="space-y-3 text-sm text-slate-600 dark:text-gray-400">
+                                <li class="flex items-start gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary mt-2"></span>
+                                    <span>Certificare în Community Management</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary mt-2"></span>
+                                    <span>Trainer acreditat ANC</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary mt-2"></span>
+                                    <span>Project Management Professional</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-brand-blue">psychology</span>
+                                Cum lucrez?
+                            </h3>
+                            <p class="text-sm text-slate-600 dark:text-gray-400 leading-relaxed mb-6">
+                                Energia este totul. Sesiunile mele sunt dinamice, interactive și orientate spre acțiune.
+                                Nu doar vorbim despre ce ai putea face, ci facem un plan concret și te pun în legătură
+                                cu oamenii potriviți din rețeaua noastră.
+                            </p>
+                            <button
+                                class="w-full flex h-12 items-center justify-center rounded-xl bg-slate-900 dark:bg-white px-6 text-base font-bold text-white dark:text-[#102218] transition-all hover:bg-brand-blue hover:text-white hover:-translate-y-1 shadow-lg">
+                                Programează o sesiune cu Costel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showProfile(memberId) {
+            // Hide all profiles
+            document.querySelectorAll('.profile-section').forEach(el => el.classList.add('hidden'));
+
+            // Remove active styles from nav
+            document.querySelectorAll('[id^="nav-"]').forEach(el => {
+                el.classList.remove('bg-blue-50', 'dark:bg-white/10', 'border-brand-blue');
+                el.classList.add('border-transparent');
+
+                // Reset text colors
+                const icon = el.querySelector('.material-symbols-outlined');
+                const text = el.querySelector('.font-bold');
+
+                icon.classList.remove('text-brand-blue');
+                text.classList.remove('text-brand-blue');
+
+                icon.classList.add('text-slate-400');
+                text.classList.add('text-slate-700', 'dark:text-gray-200');
+            });
+
+            // Show selected profile
+            const selectedProfile = document.getElementById(`profile-${memberId}`);
+            if (selectedProfile) {
+                selectedProfile.classList.remove('hidden');
+            }
+
+            // Add active style to nav
+            const activeNav = document.getElementById(`nav-${memberId}`);
+            if (activeNav) {
+                activeNav.classList.add('bg-blue-50', 'dark:bg-white/10', 'border-brand-blue');
+                activeNav.classList.remove('border-transparent');
+
+                const icon = activeNav.querySelector('.material-symbols-outlined');
+                const text = activeNav.querySelector('.font-bold');
+
+                icon.classList.remove('text-slate-400');
+                text.classList.remove('text-slate-700', 'dark:text-gray-200');
+
+                icon.classList.add('text-brand-blue');
+                text.classList.add('text-brand-blue');
+            }
+        }
+
+        // Check URL param on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const member = urlParams.get('member') || 'sergiu'; // Default to Sergiu
+            showProfile(member);
+        });
+    </script>
+</body>
+
+</html>
