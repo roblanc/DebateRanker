@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "DebateScore — AI Debate Analysis",
+  title: "DebateRank — AI Debate Analysis",
   description: "Analyze debate transcripts with AI-powered structured scoring and argument mapping",
 };
 
