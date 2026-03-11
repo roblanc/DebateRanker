@@ -65,10 +65,10 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white font-bold text-sm">
-              DS
+              DR
             </div>
             <div>
-              <h1 className="font-bold text-white text-lg leading-none">DebateScore</h1>
+              <h1 className="font-bold text-white text-lg leading-none">DebateRank</h1>
               <p className="text-xs text-slate-500 leading-none mt-0.5">AI-Powered Debate Analysis</p>
             </div>
           </div>
@@ -205,7 +205,7 @@ export default function HomePage() {
       </main>
 
       <footer className="border-t border-slate-800 py-4 text-center text-xs text-slate-600">
-        DebateScore — Powered by Claude Opus 4.6 · Scores debate mechanics, not ideology
+        DebateRank — Powered by Claude Opus 4.6 · Scores debate mechanics, not ideology
       </footer>
     </div>
   );

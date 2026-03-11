@@ -1,8 +1,8 @@
-# DebateScore — Architecture
+# DebateRank — Architecture
 
 ## Overview
 
-DebateScore is a Next.js 16 web application that analyzes debate transcripts using Claude Opus 4.6, producing structured scoring similar to sports statistics.
+DebateRank is a Next.js 16 web application that analyzes debate transcripts using Claude Opus 4.6, producing structured scoring similar to sports statistics.
 
 ## Stack
 
