@@ -101,8 +101,8 @@ export default function DebateUpload() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Debater metadata */}
-      <div className="grid grid-cols-3 gap-3">
-        <div className="col-span-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="sm:col-span-3">
           <label className="block text-xs font-medium text-slate-400 mb-1">Debate Title</label>
           <input
             type="text"

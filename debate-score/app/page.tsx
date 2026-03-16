@@ -62,7 +62,7 @@ export default function HomePage() {
     <div className="min-h-screen flex flex-col">
       {/* Header */}
       <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white font-bold text-sm">
               DR
@@ -81,7 +81,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      <main className="flex-1 max-w-6xl mx-auto w-full px-6 py-8">
+      <main className="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-8">
         {/* Hero */}
         {!showUpload && debates.length === 0 && (
           <div className="text-center py-16">
@@ -99,7 +99,7 @@ export default function HomePage() {
               Scores logic, evidence, rhetoric, and structure — not political positions or ideology.
             </p>
 
-            <div className="grid grid-cols-4 gap-4 max-w-2xl mx-auto mb-8 text-left">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto mb-8 text-left">
               {[
                 { icon: '📊', title: 'Round-by-Round Scoring', desc: '8 debate mechanics scored 0–10' },
                 { icon: '🗺️', title: 'Argument Mapping', desc: 'Visual graph of claims & rebuttals' },
@@ -162,46 +162,6 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Architecture section */}
-        {!showUpload && (
-          <div className="mt-12 border-t border-slate-800 pt-8">
-            <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-6">
-              Architecture
-            </h2>
-            <div className="grid grid-cols-3 gap-6 text-sm">
-              <div>
-                <h3 className="font-semibold text-slate-200 mb-2">Frontend</h3>
-                <ul className="space-y-1 text-slate-400 text-xs">
-                  <li>Next.js 14 (App Router)</li>
-                  <li>React + TypeScript</li>
-                  <li>Tailwind CSS</li>
-                  <li>ReactFlow (argument maps)</li>
-                  <li>Recharts (score charts)</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-semibold text-slate-200 mb-2">Backend</h3>
-                <ul className="space-y-1 text-slate-400 text-xs">
-                  <li>Next.js API Routes</li>
-                  <li>Claude Opus 4.6 (analysis)</li>
-                  <li>Adaptive thinking enabled</li>
-                  <li>Chunked transcript processing</li>
-                  <li>Background async analysis</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-semibold text-slate-200 mb-2">Storage</h3>
-                <ul className="space-y-1 text-slate-400 text-xs">
-                  <li>SQLite (better-sqlite3)</li>
-                  <li>Debates + segments</li>
-                  <li>Scores per round/debater</li>
-                  <li>Argument nodes + edges</li>
-                  <li>Key moment detection</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        )}
       </main>
 
       <footer className="border-t border-slate-800 py-4 text-center text-xs text-slate-600">
