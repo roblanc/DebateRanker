@@ -21,6 +21,7 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState<TabType>('scores');
   const [activeSegment, setActiveSegment] = useState<string | undefined>();
+  const [mobilePanel, setMobilePanel] = useState<'transcript' | 'analysis'>('analysis');
 
   const fetchDebate = useCallback(async () => {
     try {
@@ -160,10 +161,34 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
         </div>
       </header>
 
+      {/* Mobile panel toggle */}
+      <div className="flex md:hidden border-b border-slate-800 bg-slate-900/70">
+        <button
+          onClick={() => setMobilePanel('transcript')}
+          className={`flex-1 py-2.5 text-xs font-medium transition-colors ${
+            mobilePanel === 'transcript'
+              ? 'text-white border-b-2 border-blue-500'
+              : 'text-slate-400 hover:text-slate-300'
+          }`}
+        >
+          Transcript
+        </button>
+        <button
+          onClick={() => setMobilePanel('analysis')}
+          className={`flex-1 py-2.5 text-xs font-medium transition-colors ${
+            mobilePanel === 'analysis'
+              ? 'text-white border-b-2 border-blue-500'
+              : 'text-slate-400 hover:text-slate-300'
+          }`}
+        >
+          Analysis
+        </button>
+      </div>
+
       {/* Main layout: left transcript | right panel */}
-      <div className="flex-1 flex overflow-hidden" style={{ height: 'calc(100vh - 57px)' }}>
+      <div className="flex-1 flex overflow-hidden min-h-0">
         {/* Left: Transcript */}
-        <div className="w-80 flex-shrink-0 border-r border-slate-800 p-4 overflow-hidden flex flex-col">
+        <div className={`${mobilePanel === 'transcript' ? 'flex' : 'hidden'} md:flex w-full md:w-80 md:flex-shrink-0 border-r border-slate-800 p-4 overflow-hidden flex-col`}>
           <TranscriptViewer
             transcript={debate.transcript}
             segments={debate.segments}
@@ -173,7 +198,7 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
         </div>
 
         {/* Right: Analysis panel */}
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className={`${mobilePanel === 'analysis' ? 'flex' : 'hidden'} md:flex flex-1 flex-col overflow-hidden`}>
           {/* Tab nav */}
           <div className="flex items-center gap-1 px-4 pt-3 pb-0 border-b border-slate-800">
             {([
@@ -196,7 +221,7 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
             ))}
 
             {/* Scoreboard always visible at right */}
-            <div className="ml-auto flex items-center gap-3 pb-1 text-xs">
+            <div className="ml-auto hidden sm:flex items-center gap-3 pb-1 text-xs">
               <div className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-blue-400" />
                 <span className="text-slate-300 font-medium">{debate.debater_a}</span>
@@ -214,9 +239,9 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
           {/* Tab content */}
           <div className="flex-1 overflow-hidden">
             {activeTab === 'scores' && (
-              <div className="h-full flex gap-4 overflow-hidden p-4">
+              <div className="h-full overflow-y-auto md:overflow-hidden p-4 flex flex-col md:flex-row gap-4">
                 {/* Score tables */}
-                <div className="flex-1 overflow-y-auto space-y-4">
+                <div className="flex-1 md:overflow-y-auto space-y-4">
                   {isAnalyzing && debate.segments.length === 0 && (
                     <div className="flex flex-col items-center justify-center py-16 text-slate-400">
                       <svg className="animate-spin h-8 w-8 mb-3" viewBox="0 0 24 24" fill="none">
@@ -239,7 +264,7 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
                 </div>
 
                 {/* Scoreboard sidebar */}
-                <div className="w-72 flex-shrink-0 overflow-y-auto">
+                <div className="w-full md:w-72 md:flex-shrink-0 md:overflow-y-auto">
                   <Scoreboard
                     debaterA={debate.debater_a}
                     debaterB={debate.debater_b}
