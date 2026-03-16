@@ -1,6 +1,7 @@
 'use client';
 
 import { Segment, Score } from '@/types';
+import { useTheme } from './ThemeProvider';
 import {
   RadarChart,
   Radar,
@@ -36,9 +37,18 @@ const METRIC_KEYS = [
 ] as const;
 
 export default function Scoreboard({ debaterA, debaterB, totalA, totalB, segments }: ScoreboardProps) {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   const winner =
     totalA > totalB ? debaterA :
     totalB > totalA ? debaterB : 'Tie';
+
+  // Chart color tokens
+  const gridColor = isDark ? '#334155' : '#e2e8f0';
+  const tickColor = isDark ? '#94a3b8' : '#64748b';
+  const tooltipBg = isDark ? '#1e293b' : '#ffffff';
+  const tooltipBorder = isDark ? '#475569' : '#e2e8f0';
 
   // Radar chart data
   const radarData = METRIC_KEYS.map(({ key, label }) => {
@@ -73,8 +83,8 @@ export default function Scoreboard({ debaterA, debaterB, totalA, totalB, segment
   return (
     <div className="space-y-4">
       {/* Cumulative scoreboard */}
-      <div className="bg-slate-800/50 rounded-lg border border-slate-700/50 p-4">
-        <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
+      <div className="bg-white border border-slate-200 dark:bg-slate-800/50 dark:border-slate-700/50 rounded-lg p-4">
+        <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">
           Cumulative Scoreboard
         </h3>
         <div className="flex gap-4">
@@ -86,20 +96,20 @@ export default function Scoreboard({ debaterA, debaterB, totalA, totalB, segment
               key={d.name}
               className={`flex-1 rounded-lg p-3 border ${
                 d.isWinner
-                  ? 'bg-emerald-900/20 border-emerald-700/50'
-                  : 'bg-slate-700/30 border-slate-600/50'
+                  ? 'bg-emerald-50 border-emerald-300 dark:bg-emerald-900/20 dark:border-emerald-700/50'
+                  : 'bg-slate-50 border-slate-200 dark:bg-slate-700/30 dark:border-slate-600/50'
               }`}
             >
               <div className="flex items-start justify-between">
                 <div>
                   <p
                     className={`text-sm font-bold truncate ${
-                      d.color === 'blue' ? 'text-blue-400' : 'text-violet-400'
+                      d.color === 'blue' ? 'text-blue-600 dark:text-blue-400' : 'text-violet-600 dark:text-violet-400'
                     }`}
                   >
                     {d.name}
                   </p>
-                  <p className="text-2xl font-black text-white mt-1">
+                  <p className="text-2xl font-black text-slate-900 dark:text-white mt-1">
                     {d.score.toFixed(1)}
                     <span className="text-xs text-slate-400 font-normal ml-1">/ 10</span>
                   </p>
@@ -108,7 +118,7 @@ export default function Scoreboard({ debaterA, debaterB, totalA, totalB, segment
                   <span className="text-lg" title="Leading">🏆</span>
                 )}
               </div>
-              <div className="mt-2 h-1 bg-slate-700 rounded-full overflow-hidden">
+              <div className="mt-2 h-1 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                 <div
                   className={`h-full rounded-full ${
                     d.color === 'blue' ? 'bg-blue-500' : 'bg-violet-500'
@@ -123,18 +133,18 @@ export default function Scoreboard({ debaterA, debaterB, totalA, totalB, segment
 
       {/* Line chart: round progression */}
       {lineData.length > 1 && (
-        <div className="bg-slate-800/50 rounded-lg border border-slate-700/50 p-4">
-          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
+        <div className="bg-white border border-slate-200 dark:bg-slate-800/50 dark:border-slate-700/50 rounded-lg p-4">
+          <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">
             Round Progression
           </h3>
           <ResponsiveContainer width="100%" height={160}>
             <LineChart data={lineData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-              <XAxis dataKey="name" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-              <YAxis domain={[0, 10]} tick={{ fill: '#94a3b8', fontSize: 10 }} />
+              <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+              <XAxis dataKey="name" tick={{ fill: tickColor, fontSize: 10 }} />
+              <YAxis domain={[0, 10]} tick={{ fill: tickColor, fontSize: 10 }} />
               <Tooltip
-                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '6px' }}
-                labelStyle={{ color: '#94a3b8', fontSize: '11px' }}
+                contentStyle={{ backgroundColor: tooltipBg, border: `1px solid ${tooltipBorder}`, borderRadius: '6px' }}
+                labelStyle={{ color: tickColor, fontSize: '11px' }}
                 itemStyle={{ fontSize: '11px' }}
               />
               <Legend wrapperStyle={{ fontSize: '10px' }} />
@@ -161,16 +171,16 @@ export default function Scoreboard({ debaterA, debaterB, totalA, totalB, segment
 
       {/* Radar chart */}
       {radarData.length > 0 && (
-        <div className="bg-slate-800/50 rounded-lg border border-slate-700/50 p-4">
-          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
+        <div className="bg-white border border-slate-200 dark:bg-slate-800/50 dark:border-slate-700/50 rounded-lg p-4">
+          <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">
             Performance Profile
           </h3>
           <ResponsiveContainer width="100%" height={200}>
             <RadarChart data={radarData}>
-              <PolarGrid stroke="#334155" />
+              <PolarGrid stroke={gridColor} />
               <PolarAngleAxis
                 dataKey="metric"
-                tick={{ fill: '#94a3b8', fontSize: 9 }}
+                tick={{ fill: tickColor, fontSize: 9 }}
               />
               <Radar
                 name={debaterA}
@@ -190,7 +200,7 @@ export default function Scoreboard({ debaterA, debaterB, totalA, totalB, segment
               />
               <Legend wrapperStyle={{ fontSize: '10px' }} />
               <Tooltip
-                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '6px' }}
+                contentStyle={{ backgroundColor: tooltipBg, border: `1px solid ${tooltipBorder}`, borderRadius: '6px' }}
                 itemStyle={{ fontSize: '11px' }}
               />
             </RadarChart>

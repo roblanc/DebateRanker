@@ -1,14 +1,25 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 * {
   box-sizing: border-box;
 }
 
 :root {
+  color-scheme: light dark;
+}
+
+.dark {
   color-scheme: dark;
 }
 
 body {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.dark body {
   background: #020817;
   color: #e2e8f0;
 }
@@ -18,14 +29,24 @@ body {
   display: none;
 }
 
-.react-flow__controls-button {
+.dark .react-flow__controls-button {
   background: #1e293b !important;
   border-color: #334155 !important;
   color: #94a3b8 !important;
 }
 
-.react-flow__controls-button:hover {
+.dark .react-flow__controls-button:hover {
   background: #334155 !important;
+}
+
+.react-flow__controls-button {
+  background: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #475569 !important;
+}
+
+.react-flow__controls-button:hover {
+  background: #e2e8f0 !important;
 }
 
 /* Custom scrollbar */
@@ -39,11 +60,19 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #cbd5e1;
   border-radius: 3px;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
 ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
   background: #475569;
 }
 

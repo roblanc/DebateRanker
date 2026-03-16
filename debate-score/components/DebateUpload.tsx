@@ -103,40 +103,40 @@ export default function DebateUpload() {
       {/* Debater metadata */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div className="sm:col-span-3">
-          <label className="block text-xs font-medium text-slate-400 mb-1">Debate Title</label>
+          <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Debate Title</label>
           <input
             type="text"
             value={form.title}
             onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
             placeholder="e.g. Presidential Debate 2024 — Round 1"
-            className="w-full bg-slate-800 border border-slate-600 rounded px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded px-3 py-2 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-slate-400 mb-1">Debater A Name</label>
+          <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Debater A Name</label>
           <input
             type="text"
             value={form.debater_a}
             onChange={e => setForm(f => ({ ...f, debater_a: e.target.value }))}
             placeholder="e.g. Alice"
-            className="w-full bg-slate-800 border border-slate-600 rounded px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded px-3 py-2 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-slate-400 mb-1">Debater B Name</label>
+          <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Debater B Name</label>
           <input
             type="text"
             value={form.debater_b}
             onChange={e => setForm(f => ({ ...f, debater_b: e.target.value }))}
             placeholder="e.g. Bob"
-            className="w-full bg-slate-800 border border-slate-600 rounded px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded px-3 py-2 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
           />
         </div>
         <div className="flex items-end">
           <button
             type="button"
             onClick={() => setForm(f => ({ ...f, debater_a: 'Debater A', debater_b: 'Debater B', title: f.title || 'Untitled Debate' }))}
-            className="w-full text-xs text-slate-400 border border-slate-600 rounded px-2 py-2 hover:bg-slate-700 transition-colors"
+            className="w-full text-xs text-slate-500 dark:text-slate-400 border border-slate-300 dark:border-slate-600 rounded px-2 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
           >
             Use defaults
           </button>
@@ -145,14 +145,14 @@ export default function DebateUpload() {
 
       {/* Input mode toggle */}
       <div>
-        <div className="flex items-center gap-1 mb-3 bg-slate-800/60 rounded-lg p-1 w-fit">
+        <div className="flex items-center gap-1 mb-3 bg-slate-100 dark:bg-slate-800/60 rounded-lg p-1 w-fit">
           <button
             type="button"
             onClick={() => setMode('paste')}
             className={`text-xs px-3 py-1.5 rounded-md font-medium transition-colors ${
               mode === 'paste'
-                ? 'bg-slate-600 text-white'
-                : 'text-slate-400 hover:text-slate-300'
+                ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
             }`}
           >
             Paste / Upload
@@ -163,7 +163,7 @@ export default function DebateUpload() {
             className={`text-xs px-3 py-1.5 rounded-md font-medium transition-colors flex items-center gap-1.5 ${
               mode === 'youtube'
                 ? 'bg-red-700/80 text-white'
-                : 'text-slate-400 hover:text-slate-300'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
             }`}
           >
             <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
@@ -182,7 +182,7 @@ export default function DebateUpload() {
                 value={youtubeUrl}
                 onChange={e => setYoutubeUrl(e.target.value)}
                 placeholder="https://www.youtube.com/watch?v=..."
-                className="flex-1 bg-slate-800 border border-slate-600 rounded px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-red-500 transition-colors"
+                className="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded px-3 py-2 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-red-500 transition-colors"
               />
               <button
                 type="button"
@@ -190,7 +190,7 @@ export default function DebateUpload() {
                 disabled={fetching || !youtubeUrl.trim()}
                 className={`text-sm font-medium px-4 py-2 rounded transition-colors whitespace-nowrap ${
                   fetching || !youtubeUrl.trim()
-                    ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
+                    ? 'bg-slate-200 dark:bg-slate-700 text-slate-400 dark:text-slate-500 cursor-not-allowed'
                     : 'bg-red-700 hover:bg-red-600 text-white'
                 }`}
               >
@@ -205,7 +205,7 @@ export default function DebateUpload() {
                 ) : 'Fetch Transcript'}
               </button>
             </div>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-400 dark:text-slate-500">
               Works with videos that have auto-generated or manual captions enabled.
             </p>
           </div>
@@ -213,17 +213,17 @@ export default function DebateUpload() {
 
         {/* Transcript textarea (shared) */}
         <div className="flex items-center justify-between mb-1">
-          <label className="text-xs font-medium text-slate-400">
+          <label className="text-xs font-medium text-slate-600 dark:text-slate-400">
             Transcript
             {form.transcript && mode === 'youtube' && (
-              <span className="ml-2 text-emerald-400">✓ fetched</span>
+              <span className="ml-2 text-emerald-500 dark:text-emerald-400">✓ fetched</span>
             )}
           </label>
           {mode === 'paste' && (
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="text-xs text-blue-400 hover:text-blue-300 transition-colors"
+              className="text-xs text-blue-500 dark:text-blue-400 hover:text-blue-400 dark:hover:text-blue-300 transition-colors"
             >
               Upload file
             </button>
@@ -246,8 +246,8 @@ export default function DebateUpload() {
           onDrop={handleDrop}
           className={`relative rounded border-2 border-dashed transition-colors ${
             dragging
-              ? 'border-blue-500 bg-blue-950/20'
-              : 'border-slate-600 hover:border-slate-500'
+              ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/20'
+              : 'border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500'
           }`}
         >
           <textarea
@@ -259,23 +259,23 @@ export default function DebateUpload() {
                 : `Paste debate transcript here or drag & drop a .txt file...\n\nExample format:\nALICE: My position is that...\nBOB: I disagree because...\n\nOr with timestamps:\n[00:00] ALICE: Welcome to...\n[02:30] BOB: Thank you...`
             }
             rows={12}
-            className="w-full bg-transparent px-3 py-2.5 text-sm text-slate-300 placeholder-slate-600 focus:outline-none resize-none font-mono"
+            className="w-full bg-transparent px-3 py-2.5 text-sm text-slate-800 dark:text-slate-300 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none resize-none font-mono"
           />
           {dragging && (
-            <div className="absolute inset-0 flex items-center justify-center bg-blue-950/50 rounded pointer-events-none">
-              <p className="text-blue-300 font-medium">Drop transcript file here</p>
+            <div className="absolute inset-0 flex items-center justify-center bg-blue-50/80 dark:bg-blue-950/50 rounded pointer-events-none">
+              <p className="text-blue-600 dark:text-blue-300 font-medium">Drop transcript file here</p>
             </div>
           )}
         </div>
         {form.transcript && (
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
             {form.transcript.split(/\s+/).filter(Boolean).length} words
           </p>
         )}
       </div>
 
       {error && (
-        <p className="text-xs text-rose-400 bg-rose-900/20 border border-rose-700/40 rounded px-3 py-2">
+        <p className="text-xs text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-700/40 rounded px-3 py-2">
           {error}
         </p>
       )}
@@ -285,7 +285,7 @@ export default function DebateUpload() {
         disabled={loading}
         className={`w-full py-2.5 rounded font-semibold text-sm transition-all ${
           loading
-            ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
+            ? 'bg-slate-200 dark:bg-slate-700 text-slate-400 cursor-not-allowed'
             : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/30'
         }`}
       >
