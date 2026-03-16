@@ -1,9 +1,9 @@
-import Anthropic from '@anthropic-ai/sdk';
 import { SegmentAnalysis } from '@/types';
 
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+// OpenRouter — OpenAI-compatible API
+// Free models: google/gemini-2.0-flash-exp:free, meta-llama/llama-3.3-70b-instruct:free
+const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+const MODEL = process.env.OPENROUTER_MODEL || 'google/gemini-2.0-flash-exp:free';
 
 export const SYSTEM_PROMPT = `You are an expert debate analyst and rhetorical scholar. Your role is to objectively evaluate debate segments based purely on debate mechanics — logic, evidence quality, rhetorical structure, and argumentation. You do NOT evaluate political positions, ideological correctness, or factual accuracy of claims (only whether they are logically supported within the debate).
 
@@ -100,33 +100,39 @@ export async function analyzeSegment(
   debaterB: string,
   roundNumber: number
 ): Promise<SegmentAnalysis> {
-  const stream = await client.messages.stream({
-    model: 'claude-opus-4-6',
-    max_tokens: 4000,
-    thinking: { type: 'adaptive' },
-    system: SYSTEM_PROMPT,
-    messages: [
-      {
-        role: 'user',
-        content: ANALYSIS_PROMPT(segment, debaterA, debaterB, roundNumber),
-      },
-    ],
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  if (!apiKey) throw new Error('OPENROUTER_API_KEY is not set');
+
+  const res = await fetch(OPENROUTER_API_URL, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+      'HTTP-Referer': 'https://debaterank.app',
+      'X-Title': 'DebateRank',
+    },
+    body: JSON.stringify({
+      model: MODEL,
+      max_tokens: 4000,
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: ANALYSIS_PROMPT(segment, debaterA, debaterB, roundNumber) },
+      ],
+    }),
   });
 
-  const response = await stream.finalMessage();
-
-  const textBlock = response.content.find(b => b.type === 'text');
-  if (!textBlock || textBlock.type !== 'text') {
-    throw new Error('No text response from Claude');
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`OpenRouter error ${res.status}: ${err}`);
   }
 
-  const text = textBlock.text.trim();
+  const data = await res.json();
+  const text: string = data.choices?.[0]?.message?.content?.trim();
 
-  // Extract JSON from response (Claude may include explanation)
+  if (!text) throw new Error('No text response from model');
+
   const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) {
-    throw new Error('Could not extract JSON from response');
-  }
+  if (!jsonMatch) throw new Error('Could not extract JSON from response');
 
   const analysis: SegmentAnalysis = JSON.parse(jsonMatch[0]);
   return analysis;

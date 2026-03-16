@@ -3,12 +3,17 @@
 import { useState, useRef, DragEvent } from 'react';
 import { useRouter } from 'next/navigation';
 
+type InputMode = 'paste' | 'youtube';
+
 export default function DebateUpload() {
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
+  const [mode, setMode] = useState<InputMode>('paste');
   const [dragging, setDragging] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(false);
   const [error, setError] = useState('');
+  const [youtubeUrl, setYoutubeUrl] = useState('');
 
   const [form, setForm] = useState({
     title: '',
@@ -36,6 +41,26 @@ export default function DebateUpload() {
     }
   };
 
+  const fetchYouTubeTranscript = async () => {
+    if (!youtubeUrl.trim()) return;
+    setFetching(true);
+    setError('');
+    try {
+      const res = await fetch('/api/youtube', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: youtubeUrl.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to fetch transcript');
+      setForm(f => ({ ...f, transcript: data.transcript }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch transcript');
+    } finally {
+      setFetching(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -47,7 +72,6 @@ export default function DebateUpload() {
 
     setLoading(true);
     try {
-      // Create debate
       const res = await fetch('/api/debates', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -61,7 +85,6 @@ export default function DebateUpload() {
 
       const { id } = await res.json();
 
-      // Start analysis
       await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -77,12 +100,10 @@ export default function DebateUpload() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Debate metadata */}
+      {/* Debater metadata */}
       <div className="grid grid-cols-3 gap-3">
         <div className="col-span-3">
-          <label className="block text-xs font-medium text-slate-400 mb-1">
-            Debate Title
-          </label>
+          <label className="block text-xs font-medium text-slate-400 mb-1">Debate Title</label>
           <input
             type="text"
             value={form.title}
@@ -92,9 +113,7 @@ export default function DebateUpload() {
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-slate-400 mb-1">
-            Debater A Name
-          </label>
+          <label className="block text-xs font-medium text-slate-400 mb-1">Debater A Name</label>
           <input
             type="text"
             value={form.debater_a}
@@ -104,9 +123,7 @@ export default function DebateUpload() {
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-slate-400 mb-1">
-            Debater B Name
-          </label>
+          <label className="block text-xs font-medium text-slate-400 mb-1">Debater B Name</label>
           <input
             type="text"
             value={form.debater_b}
@@ -126,17 +143,91 @@ export default function DebateUpload() {
         </div>
       </div>
 
-      {/* Transcript input */}
+      {/* Input mode toggle */}
       <div>
-        <div className="flex items-center justify-between mb-1">
-          <label className="text-xs font-medium text-slate-400">Transcript</label>
+        <div className="flex items-center gap-1 mb-3 bg-slate-800/60 rounded-lg p-1 w-fit">
           <button
             type="button"
-            onClick={() => fileRef.current?.click()}
-            className="text-xs text-blue-400 hover:text-blue-300 transition-colors"
+            onClick={() => setMode('paste')}
+            className={`text-xs px-3 py-1.5 rounded-md font-medium transition-colors ${
+              mode === 'paste'
+                ? 'bg-slate-600 text-white'
+                : 'text-slate-400 hover:text-slate-300'
+            }`}
           >
-            Upload file
+            Paste / Upload
           </button>
+          <button
+            type="button"
+            onClick={() => setMode('youtube')}
+            className={`text-xs px-3 py-1.5 rounded-md font-medium transition-colors flex items-center gap-1.5 ${
+              mode === 'youtube'
+                ? 'bg-red-700/80 text-white'
+                : 'text-slate-400 hover:text-slate-300'
+            }`}
+          >
+            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+            YouTube
+          </button>
+        </div>
+
+        {/* YouTube URL input */}
+        {mode === 'youtube' && (
+          <div className="space-y-3 mb-3">
+            <div className="flex gap-2">
+              <input
+                type="url"
+                value={youtubeUrl}
+                onChange={e => setYoutubeUrl(e.target.value)}
+                placeholder="https://www.youtube.com/watch?v=..."
+                className="flex-1 bg-slate-800 border border-slate-600 rounded px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-red-500 transition-colors"
+              />
+              <button
+                type="button"
+                onClick={fetchYouTubeTranscript}
+                disabled={fetching || !youtubeUrl.trim()}
+                className={`text-sm font-medium px-4 py-2 rounded transition-colors whitespace-nowrap ${
+                  fetching || !youtubeUrl.trim()
+                    ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
+                    : 'bg-red-700 hover:bg-red-600 text-white'
+                }`}
+              >
+                {fetching ? (
+                  <span className="flex items-center gap-1.5">
+                    <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Fetching...
+                  </span>
+                ) : 'Fetch Transcript'}
+              </button>
+            </div>
+            <p className="text-xs text-slate-500">
+              Works with videos that have auto-generated or manual captions enabled.
+            </p>
+          </div>
+        )}
+
+        {/* Transcript textarea (shared) */}
+        <div className="flex items-center justify-between mb-1">
+          <label className="text-xs font-medium text-slate-400">
+            Transcript
+            {form.transcript && mode === 'youtube' && (
+              <span className="ml-2 text-emerald-400">✓ fetched</span>
+            )}
+          </label>
+          {mode === 'paste' && (
+            <button
+              type="button"
+              onClick={() => fileRef.current?.click()}
+              className="text-xs text-blue-400 hover:text-blue-300 transition-colors"
+            >
+              Upload file
+            </button>
+          )}
           <input
             ref={fileRef}
             type="file"
@@ -162,7 +253,11 @@ export default function DebateUpload() {
           <textarea
             value={form.transcript}
             onChange={e => setForm(f => ({ ...f, transcript: e.target.value }))}
-            placeholder={`Paste debate transcript here or drag & drop a .txt file...\n\nExample format:\nALICE: My position is that...\nBOB: I disagree because...\n\nOr with timestamps:\n[00:00] ALICE: Welcome to...\n[02:30] BOB: Thank you...`}
+            placeholder={
+              mode === 'youtube'
+                ? 'Transcript will appear here after fetching...'
+                : `Paste debate transcript here or drag & drop a .txt file...\n\nExample format:\nALICE: My position is that...\nBOB: I disagree because...\n\nOr with timestamps:\n[00:00] ALICE: Welcome to...\n[02:30] BOB: Thank you...`
+            }
             rows={12}
             className="w-full bg-transparent px-3 py-2.5 text-sm text-slate-300 placeholder-slate-600 focus:outline-none resize-none font-mono"
           />
