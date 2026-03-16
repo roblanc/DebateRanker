@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 import { ensureDb } from '@/lib/db';
 import { analyzeSegment } from '@/lib/claude';
@@ -37,10 +37,14 @@ export async function POST(req: NextRequest) {
       db.execute({ sql: 'DELETE FROM argument_edges WHERE debate_id = ?', args: [debate_id] }),
     ]);
 
-    // Start analysis in background
-    analyzeDebate(debate_id, debate, db).catch(async err => {
-      console.error('Analysis failed:', err);
-      await db.execute({ sql: "UPDATE debates SET status = 'error' WHERE id = ?", args: [debate_id] });
+    // after() keeps the serverless function alive after the response is sent
+    after(async () => {
+      try {
+        await analyzeDebate(debate_id, debate, db);
+      } catch (err) {
+        console.error('Analysis failed:', err);
+        await db.execute({ sql: "UPDATE debates SET status = 'error' WHERE id = ?", args: [debate_id] });
+      }
     });
 
     return NextResponse.json({ message: 'Analysis started', debate_id });
