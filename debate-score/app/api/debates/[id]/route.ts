@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
+import { ensureDb } from '@/lib/db';
 import { Debate, Segment, Score, Moment, ArgumentNode, ArgumentEdge, DebateWithDetails } from '@/types';
 
 export async function GET(
@@ -8,37 +8,43 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const db = getDb();
+    const db = await ensureDb();
 
-    const debate = db.prepare('SELECT * FROM debates WHERE id = ?').get(id) as Debate | undefined;
-    if (!debate) {
+    const debateResult = await db.execute({ sql: 'SELECT * FROM debates WHERE id = ?', args: [id] });
+    if (!debateResult.rows.length) {
       return NextResponse.json({ error: 'Debate not found' }, { status: 404 });
     }
+    const debate = debateResult.rows[0] as unknown as Debate;
 
-    const segments = db.prepare(
-      'SELECT * FROM segments WHERE debate_id = ? ORDER BY round_number ASC'
-    ).all(id) as Segment[];
-
-    const segmentsWithScores = segments.map(seg => {
-      const scores = db.prepare('SELECT * FROM scores WHERE segment_id = ?').all(seg.id) as Score[];
-      const moments = db.prepare('SELECT * FROM moments WHERE segment_id = ?').all(seg.id) as Moment[];
-      return { ...seg, scores, moments };
+    const segmentsResult = await db.execute({
+      sql: 'SELECT * FROM segments WHERE debate_id = ? ORDER BY round_number ASC',
+      args: [id],
     });
+    const segments = segmentsResult.rows as unknown as Segment[];
 
-    const argument_nodes = db.prepare(
-      'SELECT * FROM argument_nodes WHERE debate_id = ?'
-    ).all(id) as ArgumentNode[];
+    const segmentsWithScores = await Promise.all(
+      segments.map(async seg => {
+        const [scoresResult, momentsResult] = await Promise.all([
+          db.execute({ sql: 'SELECT * FROM scores WHERE segment_id = ?', args: [seg.id] }),
+          db.execute({ sql: 'SELECT * FROM moments WHERE segment_id = ?', args: [seg.id] }),
+        ]);
+        return {
+          ...seg,
+          scores: scoresResult.rows as unknown as Score[],
+          moments: momentsResult.rows as unknown as Moment[],
+        };
+      })
+    );
 
-    const argument_edges = db.prepare(
-      'SELECT * FROM argument_edges WHERE debate_id = ?'
-    ).all(id) as ArgumentEdge[];
+    const [nodesResult, edgesResult] = await Promise.all([
+      db.execute({ sql: 'SELECT * FROM argument_nodes WHERE debate_id = ?', args: [id] }),
+      db.execute({ sql: 'SELECT * FROM argument_edges WHERE debate_id = ?', args: [id] }),
+    ]);
 
-    // Calculate cumulative totals
-    let totalA = 0;
-    let totalB = 0;
-    let countA = 0;
-    let countB = 0;
+    const argument_nodes = nodesResult.rows as unknown as ArgumentNode[];
+    const argument_edges = edgesResult.rows as unknown as ArgumentEdge[];
 
+    let totalA = 0, totalB = 0, countA = 0, countB = 0;
     for (const seg of segmentsWithScores) {
       for (const score of seg.scores) {
         if (score.debater === 'A') { totalA += score.total_score; countA++; }
@@ -70,8 +76,8 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const db = getDb();
-    db.prepare('DELETE FROM debates WHERE id = ?').run(id);
+    const db = await ensureDb();
+    await db.execute({ sql: 'DELETE FROM debates WHERE id = ?', args: [id] });
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error(err);

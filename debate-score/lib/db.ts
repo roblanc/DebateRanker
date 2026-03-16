@@ -1,29 +1,28 @@
-import Database from 'better-sqlite3';
-import path from 'path';
-import fs from 'fs';
+import { createClient, Client } from '@libsql/client';
 
-const DB_DIR = path.join(process.cwd(), 'data');
-const DB_PATH = path.join(DB_DIR, 'debatescore.db');
+let _client: Client | null = null;
+let _schemaInit: Promise<void> | null = null;
 
-let db: Database.Database | null = null;
+export function getDb(): Client {
+  if (_client) return _client;
+  const url = process.env.TURSO_DATABASE_URL;
+  const authToken = process.env.TURSO_AUTH_TOKEN;
+  if (!url) throw new Error('TURSO_DATABASE_URL is not set');
+  _client = createClient({ url, authToken });
+  return _client;
+}
 
-export function getDb(): Database.Database {
-  if (db) return db;
-
-  if (!fs.existsSync(DB_DIR)) {
-    fs.mkdirSync(DB_DIR, { recursive: true });
+export async function ensureDb(): Promise<Client> {
+  const db = getDb();
+  if (!_schemaInit) {
+    _schemaInit = initSchema(db);
   }
-
-  db = new Database(DB_PATH);
-  db.pragma('journal_mode = WAL');
-  db.pragma('foreign_keys = ON');
-
-  initSchema(db);
+  await _schemaInit;
   return db;
 }
 
-function initSchema(db: Database.Database) {
-  db.exec(`
+async function initSchema(db: Client): Promise<void> {
+  await db.executeMultiple(`
     CREATE TABLE IF NOT EXISTS debates (
       id TEXT PRIMARY KEY,
       title TEXT NOT NULL,

@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
-import { getDb } from '@/lib/db';
+import { ensureDb } from '@/lib/db';
 import { Debate } from '@/types';
 
 export async function GET() {
   try {
-    const db = getDb();
-    const debates = db.prepare(
+    const db = await ensureDb();
+    const result = await db.execute(
       'SELECT id, title, debater_a, debater_b, status, created_at FROM debates ORDER BY created_at DESC'
-    ).all() as Debate[];
+    );
+    const debates = result.rows as unknown as Debate[];
     return NextResponse.json({ debates });
   } catch (err) {
     console.error(err);
@@ -28,12 +29,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const db = getDb();
+    const db = await ensureDb();
     const id = uuidv4();
 
-    db.prepare(
-      'INSERT INTO debates (id, title, debater_a, debater_b, transcript, status) VALUES (?, ?, ?, ?, ?, ?)'
-    ).run(id, title, debater_a, debater_b, transcript, 'pending');
+    await db.execute({
+      sql: 'INSERT INTO debates (id, title, debater_a, debater_b, transcript, status) VALUES (?, ?, ?, ?, ?, ?)',
+      args: [id, title, debater_a, debater_b, transcript, 'pending'],
+    });
 
     return NextResponse.json({ id }, { status: 201 });
   } catch (err) {
