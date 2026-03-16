@@ -23,9 +23,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Debate not found' }, { status: 404 });
     }
 
-    if (debate.status === 'analyzing') {
-      return NextResponse.json({ error: 'Debate is already being analyzed' }, { status: 409 });
-    }
+    // Allow retry even if stuck in analyzing state
 
     await db.execute({ sql: "UPDATE debates SET status = 'analyzing' WHERE id = ?", args: [debate_id] });
 
