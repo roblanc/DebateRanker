@@ -21,6 +21,7 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState<TabType>('scores');
   const [activeSegment, setActiveSegment] = useState<string | undefined>();
+  const [retrying, setRetrying] = useState(false);
 
   const fetchDebate = useCallback(async () => {
     try {
@@ -62,12 +63,17 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
   };
 
   const handleReanalyze = async () => {
-    await fetch('/api/analyze', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ debate_id: id }),
-    });
-    fetchDebate();
+    setRetrying(true);
+    try {
+      await fetch('/api/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ debate_id: id }),
+      });
+      await fetchDebate();
+    } finally {
+      setRetrying(false);
+    }
   };
 
   if (loading) {
@@ -135,9 +141,20 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
             {(debate.status === 'error' || debate.status === 'analyzing') && (
               <button
                 onClick={handleReanalyze}
-                className="text-[10px] sm:text-xs text-rose-500 hover:text-rose-400 border border-rose-900/30 bg-rose-900/10 px-2 sm:px-3 py-1 rounded-full font-bold uppercase tracking-tighter transition-colors"
+                disabled={retrying}
+                className="text-[10px] sm:text-xs text-rose-500 hover:text-rose-400 border border-rose-900/30 bg-rose-900/10 px-2 sm:px-4 py-1 rounded-full font-bold uppercase tracking-tighter transition-all flex items-center gap-1.5"
               >
-                Retry
+                {retrying ? (
+                  <>
+                    <svg className="animate-spin h-2.5 w-2.5" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Retrying
+                  </>
+                ) : (
+                  'Retry'
+                )}
               </button>
             )}
             {debate.status === 'complete' && (
