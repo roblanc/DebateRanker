@@ -23,22 +23,22 @@ interface ArgumentMapProps {
 }
 
 const NODE_TYPE_STYLES = {
-  claim: { bg: 'bg-blue-900/80', border: 'border-blue-500/60', text: 'text-blue-200' },
-  rebuttal: { bg: 'bg-rose-900/80', border: 'border-rose-500/60', text: 'text-rose-200' },
-  evidence: { bg: 'bg-emerald-900/80', border: 'border-emerald-500/60', text: 'text-emerald-200' },
-  concession: { bg: 'bg-amber-900/80', border: 'border-amber-500/60', text: 'text-amber-200' },
+  claim: { bg: 'bg-amber-50 dark:bg-amber-900/20', border: 'border-amber-200 dark:border-amber-500/40', text: 'text-amber-800 dark:text-amber-200' },
+  rebuttal: { bg: 'bg-rose-50 dark:bg-rose-900/20', border: 'border-rose-200 dark:border-rose-500/40', text: 'text-rose-800 dark:text-rose-200' },
+  evidence: { bg: 'bg-emerald-50 dark:bg-emerald-900/20', border: 'border-emerald-200 dark:border-emerald-500/40', text: 'text-emerald-800 dark:text-emerald-200' },
+  concession: { bg: 'bg-stone-50 dark:bg-stone-800/50', border: 'border-stone-200 dark:border-stone-600/40', text: 'text-stone-800 dark:text-stone-200' },
 };
 
 const DEBATER_COLORS = {
-  A: { ring: 'ring-blue-400', label: 'bg-blue-600' },
-  B: { ring: 'ring-violet-400', label: 'bg-violet-600' },
+  A: { ring: 'ring-amber-500', label: 'bg-amber-600' },
+  B: { ring: 'ring-stone-400', label: 'bg-stone-500' },
 };
 
 const EDGE_STYLES = {
   supports: { stroke: '#10b981', label: 'supports', animated: false },
   rebuts: { stroke: '#f43f5e', label: 'rebuts', animated: true },
   concedes_to: { stroke: '#f59e0b', label: 'concedes', animated: false },
-  qualifies: { stroke: '#a78bfa', label: 'qualifies', animated: false },
+  qualifies: { stroke: '#78716c', label: 'qualifies', animated: false },
 };
 
 function ArgumentNodeCard({ data }: { data: { node: ArgNode; debaterName: string } }) {
@@ -48,17 +48,17 @@ function ArgumentNodeCard({ data }: { data: { node: ArgNode; debaterName: string
 
   return (
     <div
-      className={`${typeStyle.bg} border ${typeStyle.border} rounded-lg p-2 max-w-48 shadow-lg ring-1 ${debaterColor.ring} ring-opacity-30`}
+      className={`${typeStyle.bg} border ${typeStyle.border} rounded-xl p-3 max-w-56 shadow-md ring-1 ${debaterColor.ring} ring-opacity-20 transition-all hover:shadow-lg`}
     >
-      <Handle type="target" position={Position.Top} className="!bg-slate-500" />
-      <div className="flex items-center gap-1.5 mb-1">
-        <span className={`text-xs font-bold px-1.5 py-0.5 rounded text-white ${debaterColor.label}`}>
+      <Handle type="target" position={Position.Top} className="!bg-stone-400 dark:!bg-stone-600 !border-none" />
+      <div className="flex items-center justify-between gap-2 mb-2 pb-1 border-b border-black/5 dark:border-white/5">
+        <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full text-white uppercase tracking-tighter ${debaterColor.label}`}>
           {debaterName}
         </span>
-        <span className={`text-xs opacity-70 ${typeStyle.text}`}>{node.type}</span>
+        <span className={`text-[9px] font-bold uppercase tracking-widest opacity-50 ${typeStyle.text}`}>{node.type}</span>
       </div>
-      <p className={`text-xs leading-snug ${typeStyle.text}`}>{node.claim}</p>
-      <Handle type="source" position={Position.Bottom} className="!bg-slate-500" />
+      <p className={`text-xs leading-relaxed font-serif ${typeStyle.text}`}>{node.claim}</p>
+      <Handle type="source" position={Position.Bottom} className="!bg-stone-400 dark:!bg-stone-600 !border-none" />
     </div>
   );
 }
@@ -110,28 +110,28 @@ export default function ArgumentMap({ nodes, edges, debaterA, debaterB }: Argume
   }
 
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full font-sans">
       {/* Legend */}
-      <div className="flex flex-wrap gap-3 mb-3 text-xs">
+      <div className="flex flex-wrap gap-4 mb-4 text-[10px] font-bold uppercase tracking-widest px-1">
         <div className="flex gap-2 items-center">
-          <span className="font-semibold text-slate-400">Nodes:</span>
+          <span className="text-stone-400 dark:text-stone-500">Nodes:</span>
           {Object.entries(NODE_TYPE_STYLES).map(([type, style]) => (
-            <span key={type} className={`px-1.5 py-0.5 rounded border ${style.bg} ${style.border} ${style.text}`}>
+            <span key={type} className={`px-2 py-0.5 rounded-full border ${style.bg} ${style.border} ${style.text} shadow-sm`}>
               {type}
             </span>
           ))}
         </div>
-        <div className="flex gap-2 items-center">
-          <span className="font-semibold text-slate-400">Edges:</span>
+        <div className="flex gap-2 items-center border-l border-stone-200 dark:border-stone-800 pl-4">
+          <span className="text-stone-400 dark:text-stone-500">Links:</span>
           {Object.entries(EDGE_STYLES).map(([rel, style]) => (
-            <span key={rel} style={{ color: style.stroke }} className="font-medium">
+            <span key={rel} style={{ color: style.stroke }} className="opacity-80">
               {style.label}
             </span>
           ))}
         </div>
       </div>
 
-      <div style={{ height: 'calc(100% - 40px)' }} className="rounded-lg overflow-hidden border border-slate-700/50">
+      <div style={{ height: 'calc(100% - 48px)' }} className="rounded-2xl overflow-hidden border border-stone-200 dark:border-stone-800 shadow-inner">
         <ReactFlow
           nodes={flowNodes}
           edges={flowEdges}
@@ -139,13 +139,14 @@ export default function ArgumentMap({ nodes, edges, debaterA, debaterB }: Argume
           fitView
           fitViewOptions={{ padding: 0.2 }}
           attributionPosition="bottom-right"
-          style={{ background: '#0f172a' }}
+          style={{ background: 'var(--background)' }}
         >
-          <Background color="#1e293b" gap={20} />
-          <Controls style={{ background: '#1e293b', border: '1px solid #334155' }} />
+          <Background color="var(--border)" gap={20} size={1} opacity={0.5} />
+          <Controls className="!bg-white dark:!bg-[#1a1a1a] !border-stone-200 dark:!border-[#2a2a2a] !shadow-lg rounded-xl overflow-hidden" />
           <MiniMap
-            style={{ background: '#0f172a', border: '1px solid #334155' }}
-            nodeColor="#334155"
+            style={{ background: 'var(--card-bg)', border: '1px solid var(--border)', borderRadius: '12px' }}
+            nodeColor="var(--border)"
+            maskColor="rgba(0,0,0,0.1)"
           />
         </ReactFlow>
       </div>

@@ -73,8 +73,8 @@ export default function Scoreboard({ debaterA, debaterB, totalA, totalB, segment
   return (
     <div className="space-y-6">
       {/* Cumulative scoreboard */}
-      <div className="bg-[#111] rounded-2xl border border-[#222] p-5 shadow-sm">
-        <h3 className="text-[10px] font-bold text-stone-500 uppercase tracking-[0.2em] mb-4">
+      <div className="bg-white dark:bg-[#111] rounded-2xl border border-stone-200 dark:border-[#222] p-5 shadow-sm">
+        <h3 className="text-[10px] font-bold text-stone-400 dark:text-stone-500 uppercase tracking-[0.2em] mb-4">
           Scholarly Standing
         </h3>
         <div className="flex flex-col sm:flex-row gap-4">
@@ -86,32 +86,32 @@ export default function Scoreboard({ debaterA, debaterB, totalA, totalB, segment
               key={d.name}
               className={`flex-1 rounded-xl p-4 border transition-all duration-500 ${
                 d.isWinner
-                  ? 'bg-amber-900/5 border-amber-900/30'
-                  : 'bg-[#1a1a1a] border-[#2a2a2a]'
+                  ? 'bg-amber-50 dark:bg-amber-900/5 border-amber-200 dark:border-amber-900/30'
+                  : 'bg-stone-50 dark:bg-[#1a1a1a] border-stone-100 dark:border-[#2a2a2a]'
               }`}
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0 flex-1">
                   <p
                     className={`text-xs font-bold uppercase tracking-widest truncate ${
-                      d.color === 'amber' ? 'text-amber-500' : 'text-stone-400'
+                      d.color === 'amber' ? 'text-amber-600 dark:text-amber-500' : 'text-stone-500 dark:text-stone-400'
                     }`}
                   >
                     {d.name}
                   </p>
-                  <p className="text-3xl font-serif text-white mt-1">
+                  <p className="text-3xl font-serif text-stone-900 dark:text-white mt-1">
                     {d.score.toFixed(1)}
-                    <span className="text-[10px] text-stone-600 font-sans font-normal ml-1">/ 10</span>
+                    <span className="text-[10px] text-stone-400 dark:text-stone-600 font-sans font-normal ml-1">/ 10</span>
                   </p>
                 </div>
                 {d.isWinner && (
                   <span className="text-lg opacity-80" title="Leading">🏆</span>
                 )}
               </div>
-              <div className="mt-3 h-1 bg-[#222] rounded-full overflow-hidden">
+              <div className="mt-3 h-1 bg-stone-200 dark:bg-[#222] rounded-full overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all duration-700 ${
-                    d.color === 'amber' ? 'bg-amber-600' : 'bg-stone-500'
+                    d.color === 'amber' ? 'bg-amber-600' : 'bg-stone-400 dark:bg-stone-500'
                   }`}
                   style={{ width: `${(d.score / 10) * 100}%` }}
                 />
@@ -123,17 +123,17 @@ export default function Scoreboard({ debaterA, debaterB, totalA, totalB, segment
 
       {/* Line chart: round progression */}
       {lineData.length > 1 && (
-        <div className="bg-[#111] rounded-2xl border border-[#222] p-5 shadow-sm">
-          <h3 className="text-[10px] font-bold text-stone-500 uppercase tracking-[0.2em] mb-4">
+        <div className="bg-white dark:bg-[#111] rounded-2xl border border-stone-200 dark:border-[#222] p-5 shadow-sm">
+          <h3 className="text-[10px] font-bold text-stone-400 dark:text-stone-500 uppercase tracking-[0.2em] mb-4">
             Argumentative Progression
           </h3>
           <ResponsiveContainer width="100%" height={160}>
             <LineChart data={lineData} margin={{ top: 5, right: 5, left: -30, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1a1a1a" vertical={false} />
-              <XAxis dataKey="name" tick={{ fill: '#57534e', fontSize: 10, fontWeight: 'bold' }} axisLine={false} tickLine={false} />
-              <YAxis domain={[0, 10]} tick={{ fill: '#57534e', fontSize: 10 }} axisLine={false} tickLine={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} opacity={0.5} />
+              <XAxis dataKey="name" tick={{ fill: 'var(--muted)', fontSize: 10, fontWeight: 'bold' }} axisLine={false} tickLine={false} />
+              <YAxis domain={[0, 10]} tick={{ fill: 'var(--muted)', fontSize: 10 }} axisLine={false} tickLine={false} />
               <Tooltip
-                contentStyle={{ backgroundColor: '#151515', border: '1px solid #222', borderRadius: '12px', fontSize: '11px', fontFamily: 'var(--sans)' }}
+                contentStyle={{ backgroundColor: 'var(--card-bg)', border: '1px solid var(--border)', borderRadius: '12px', fontSize: '11px', fontFamily: 'var(--sans)' }}
                 itemStyle={{ padding: '2px 0' }}
               />
               <Legend wrapperStyle={{ fontSize: '10px', fontWeight: 'bold', paddingTop: '10px' }} iconType="circle" />
@@ -149,9 +149,9 @@ export default function Scoreboard({ debaterA, debaterB, totalA, totalB, segment
               <Line
                 type="monotone"
                 dataKey={debaterB}
-                stroke="#57534e"
+                stroke="var(--muted)"
                 strokeWidth={2.5}
-                dot={{ fill: '#57534e', r: 3, strokeWidth: 0 }}
+                dot={{ fill: 'var(--muted)', r: 3, strokeWidth: 0 }}
                 activeDot={{ r: 5, strokeWidth: 0 }}
                 connectNulls={false}
               />
@@ -162,16 +162,16 @@ export default function Scoreboard({ debaterA, debaterB, totalA, totalB, segment
 
       {/* Radar chart */}
       {radarData.length > 0 && (
-        <div className="bg-[#111] rounded-2xl border border-[#222] p-5 shadow-sm">
-          <h3 className="text-[10px] font-bold text-stone-500 uppercase tracking-[0.2em] mb-4">
+        <div className="bg-white dark:bg-[#111] rounded-2xl border border-stone-200 dark:border-[#222] p-5 shadow-sm">
+          <h3 className="text-[10px] font-bold text-stone-400 dark:text-stone-500 uppercase tracking-[0.2em] mb-4">
             Intellectual Profile
           </h3>
           <ResponsiveContainer width="100%" height={220}>
             <RadarChart data={radarData}>
-              <PolarGrid stroke="#1a1a1a" />
+              <PolarGrid stroke="var(--border)" opacity={0.5} />
               <PolarAngleAxis
                 dataKey="metric"
-                tick={{ fill: '#57534e', fontSize: 9, fontWeight: 'bold' }}
+                tick={{ fill: 'var(--muted)', fontSize: 9, fontWeight: 'bold' }}
               />
               <Radar
                 name={debaterA}
@@ -184,14 +184,14 @@ export default function Scoreboard({ debaterA, debaterB, totalA, totalB, segment
               <Radar
                 name={debaterB}
                 dataKey={debaterB}
-                stroke="#57534e"
-                fill="#57534e"
+                stroke="var(--muted)"
+                fill="var(--muted)"
                 fillOpacity={0.1}
                 strokeWidth={2}
               />
               <Legend wrapperStyle={{ fontSize: '10px', fontWeight: 'bold' }} iconType="circle" />
               <Tooltip
-                contentStyle={{ backgroundColor: '#151515', border: '1px solid #222', borderRadius: '12px', fontSize: '11px' }}
+                contentStyle={{ backgroundColor: 'var(--card-bg)', border: '1px solid var(--border)', borderRadius: '12px', fontSize: '11px' }}
               />
             </RadarChart>
           </ResponsiveContainer>

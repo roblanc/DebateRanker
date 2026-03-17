@@ -1,22 +1,36 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0d0d0d;
-  --foreground: #d1d1d1;
-  --card-bg: #151515;
-  --accent: #d97706; /* Warm amber/gold */
-  --border: #222222;
+  --background: #fdfdfc;
+  --foreground: #1a1a1a;
+  --card-bg: #ffffff;
+  --card-foreground: #1a1a1a;
+  --accent: #d97706;
+  --border: #e5e5e5;
+  --muted: #737373;
+  --muted-bg: #f5f5f4;
   --serif: var(--font-serif), serif;
   --sans: var(--font-inter), sans-serif;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #d1d1d1;
+  --card-bg: #111111;
+  --card-foreground: #e5e5e5;
+  --border: #222222;
+  --muted: #a1a1aa;
+  --muted-bg: #1a1a1a;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-h1, h2, h3, .font-serif {
+h1, h2, h3, h4, .font-serif {
   font-family: var(--serif);
 }
 
@@ -31,12 +45,12 @@ h1, h2, h3, .font-serif {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2a2a2a;
+  background: var(--border);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3a3a3a;
+  background: var(--muted);
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -52,7 +66,7 @@ h1, h2, h3, .font-serif {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
 .claude-accent-text {
@@ -63,12 +77,30 @@ h1, h2, h3, .font-serif {
   border-color: var(--border);
 }
 
-/* ReactFlow dark theme overrides */
+/* ReactFlow overrides */
 .react-flow__attribution {
   display: none;
 }
 .react-flow__controls-button {
-  background: #1e1e1e !important;
-  border-color: #2e2e2e !important;
-  color: #a1a1a1 !important;
+  background: var(--card-bg) !important;
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 20px;
 }

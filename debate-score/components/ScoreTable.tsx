@@ -65,15 +65,15 @@ export default function ScoreTable({ segment, scores, debaterA, debaterB }: Scor
     scoreB.total_score > scoreA.total_score ? 'B' : 'tie';
 
   return (
-    <div className="bg-[#111] rounded-2xl border border-[#222] overflow-hidden shadow-sm">
+    <div className="bg-white dark:bg-[#111] rounded-2xl border border-stone-200 dark:border-[#222] overflow-hidden shadow-sm">
       {/* Round header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-[#151515] border-b border-[#222]">
+      <div className="flex items-center justify-between px-4 py-3 bg-stone-50 dark:bg-[#151515] border-b border-stone-200 dark:border-[#222]">
         <div className="min-w-0 flex-1 mr-4">
-          <span className="text-[10px] font-bold text-stone-500 uppercase tracking-[0.2em] block mb-0.5">
+          <span className="text-[10px] font-bold text-stone-400 dark:text-stone-500 uppercase tracking-[0.2em] block mb-0.5">
             Round {segment.round_number}
           </span>
           {segment.topic && (
-            <h4 className="text-base font-serif text-white truncate leading-tight">
+            <h4 className="text-base font-serif text-stone-900 dark:text-white truncate leading-tight">
               {segment.topic}
             </h4>
           )}
@@ -87,7 +87,7 @@ export default function ScoreTable({ segment, scores, debaterA, debaterB }: Scor
 
       {/* Metric rows */}
       <div className="p-3 sm:p-5 space-y-3">
-        <div className="grid grid-cols-[1fr_22%_22%] sm:grid-cols-[1fr_100px_100px] md:grid-cols-[1fr_120px_120px] gap-x-4 sm:gap-x-8 text-[10px] font-bold uppercase tracking-[0.15em] text-stone-600 mb-2 px-1">
+        <div className="grid grid-cols-[1fr_22%_22%] sm:grid-cols-[1fr_100px_100px] md:grid-cols-[1fr_120px_120px] gap-x-4 sm:gap-x-8 text-[10px] font-bold uppercase tracking-[0.15em] text-stone-400 dark:text-stone-600 mb-2 px-1">
           <span>Dimension</span>
           <span className="text-center truncate">{debaterA}</span>
           <span className="text-center truncate">{debaterB}</span>
@@ -95,7 +95,7 @@ export default function ScoreTable({ segment, scores, debaterA, debaterB }: Scor
 
         {METRICS.map(({ key, label, icon }) => (
           <div key={key} className="grid grid-cols-[1fr_22%_22%] sm:grid-cols-[1fr_100px_100px] md:grid-cols-[1fr_120px_120px] gap-x-4 sm:gap-x-8 items-center px-1 group">
-            <span className="text-[11px] text-stone-400 flex items-center gap-2 min-w-0 group-hover:text-stone-200 transition-colors">
+            <span className="text-[11px] text-stone-600 dark:text-stone-400 flex items-center gap-2 min-w-0 group-hover:text-black dark:group-hover:text-stone-200 transition-colors">
               <span className="flex-shrink-0 opacity-50 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all">{icon}</span>
               <span className="truncate">{label}</span>
             </span>
@@ -103,28 +103,28 @@ export default function ScoreTable({ segment, scores, debaterA, debaterB }: Scor
               {scoreA ? (
                 <ScoreBar value={scoreA[key] as number} />
               ) : (
-                <div className="h-1 bg-[#1a1a1a] rounded-full w-full" />
+                <div className="h-1 bg-stone-100 dark:bg-[#1a1a1a] rounded-full w-full" />
               )}
             </div>
             <div className="">
               {scoreB ? (
                 <ScoreBar value={scoreB[key] as number} />
               ) : (
-                <div className="h-1 bg-[#1a1a1a] rounded-full w-full" />
+                <div className="h-1 bg-stone-100 dark:bg-[#1a1a1a] rounded-full w-full" />
               )}
             </div>
           </div>
         ))}
 
         {/* Round total */}
-        <div className="border-t border-[#222] pt-4 mt-4 px-1">
+        <div className="border-t border-stone-100 dark:border-[#222] pt-4 mt-4 px-1">
           <div className="grid grid-cols-[1fr_22%_22%] sm:grid-cols-[1fr_100px_100px] md:grid-cols-[1fr_120px_120px] gap-x-4 sm:gap-x-8 items-center">
-            <span className="text-xs font-bold text-stone-500 uppercase tracking-widest">Aggregate</span>
+            <span className="text-xs font-bold text-stone-400 dark:text-stone-500 uppercase tracking-widest">Aggregate</span>
             <div className="text-center">
               {scoreA && (
                 <span
                   className={`text-base font-serif font-medium ${
-                    winner === 'A' ? 'text-white' : 'text-stone-500'
+                    winner === 'A' ? 'text-stone-900 dark:text-white' : 'text-stone-400 dark:text-stone-500'
                   }`}
                 >
                   {scoreA.total_score.toFixed(1)}
@@ -135,7 +135,7 @@ export default function ScoreTable({ segment, scores, debaterA, debaterB }: Scor
               {scoreB && (
                 <span
                   className={`text-base font-serif font-medium ${
-                    winner === 'B' ? 'text-white' : 'text-stone-500'
+                    winner === 'B' ? 'text-stone-900 dark:text-white' : 'text-stone-400 dark:text-stone-500'
                   }`}
                 >
                   {scoreB.total_score.toFixed(1)}
@@ -151,16 +151,16 @@ export default function ScoreTable({ segment, scores, debaterA, debaterB }: Scor
         <div className="px-5 pb-5 space-y-3">
           {scoreA?.notes && (
             <div className="flex gap-3">
-              <span className="text-[10px] font-bold text-stone-600 uppercase tracking-tighter mt-1 w-16 flex-shrink-0">{debaterA}</span>
-              <p className="text-xs text-stone-400 leading-relaxed font-sans italic opacity-80">
+              <span className="text-[10px] font-bold text-stone-400 dark:text-stone-600 uppercase tracking-tighter mt-1 w-16 flex-shrink-0">{debaterA}</span>
+              <p className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed font-sans italic opacity-80">
                 "{scoreA.notes}"
               </p>
             </div>
           )}
           {scoreB?.notes && (
             <div className="flex gap-3">
-              <span className="text-[10px] font-bold text-stone-600 uppercase tracking-tighter mt-1 w-16 flex-shrink-0">{debaterB}</span>
-              <p className="text-xs text-stone-400 leading-relaxed font-sans italic opacity-80">
+              <span className="text-[10px] font-bold text-stone-400 dark:text-stone-600 uppercase tracking-tighter mt-1 w-16 flex-shrink-0">{debaterB}</span>
+              <p className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed font-sans italic opacity-80">
                 "{scoreB.notes}"
               </p>
             </div>

@@ -99,44 +99,44 @@ export default function DebateUpload() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-6 font-sans">
       {/* Debater metadata */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="sm:col-span-3">
-          <label className="block text-xs font-medium text-slate-400 mb-1">Debate Title</label>
+          <label className="block text-[10px] font-bold text-stone-400 dark:text-stone-500 uppercase tracking-widest mb-2">Debate Title</label>
           <input
             type="text"
             value={form.title}
             onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
             placeholder="e.g. Presidential Debate 2024 — Round 1"
-            className="w-full bg-slate-800 border border-slate-600 rounded px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+            className="w-full bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl px-4 py-3 text-sm text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:border-amber-500 transition-all shadow-inner"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-slate-400 mb-1">Debater A Name</label>
+          <label className="block text-[10px] font-bold text-stone-400 dark:text-stone-500 uppercase tracking-widest mb-2">Debater A</label>
           <input
             type="text"
             value={form.debater_a}
             onChange={e => setForm(f => ({ ...f, debater_a: e.target.value }))}
             placeholder="e.g. Alice"
-            className="w-full bg-slate-800 border border-slate-600 rounded px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+            className="w-full bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl px-4 py-3 text-sm text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:border-amber-500 transition-all shadow-inner"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-slate-400 mb-1">Debater B Name</label>
+          <label className="block text-[10px] font-bold text-stone-400 dark:text-stone-500 uppercase tracking-widest mb-2">Debater B</label>
           <input
             type="text"
             value={form.debater_b}
             onChange={e => setForm(f => ({ ...f, debater_b: e.target.value }))}
             placeholder="e.g. Bob"
-            className="w-full bg-slate-800 border border-slate-600 rounded px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+            className="w-full bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl px-4 py-3 text-sm text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:border-amber-500 transition-all shadow-inner"
           />
         </div>
         <div className="flex items-end">
           <button
             type="button"
             onClick={() => setForm(f => ({ ...f, debater_a: 'Debater A', debater_b: 'Debater B', title: f.title || 'Untitled Debate' }))}
-            className="w-full text-xs text-slate-400 border border-slate-600 rounded px-2 py-2 hover:bg-slate-700 transition-colors"
+            className="w-full text-[10px] font-bold uppercase tracking-widest text-stone-400 dark:text-stone-500 border border-stone-200 dark:border-stone-800 rounded-xl px-2 py-3.5 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
           >
             Use defaults
           </button>
@@ -145,14 +145,14 @@ export default function DebateUpload() {
 
       {/* Input mode toggle */}
       <div>
-        <div className="flex items-center gap-1 mb-3 bg-slate-800/60 rounded-lg p-1 w-fit">
+        <div className="flex items-center gap-1 mb-4 bg-stone-100 dark:bg-stone-900 rounded-full p-1 w-fit border border-stone-200 dark:border-stone-800 shadow-inner">
           <button
             type="button"
             onClick={() => setMode('paste')}
-            className={`text-xs px-3 py-1.5 rounded-md font-medium transition-colors ${
+            className={`text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-full transition-all ${
               mode === 'paste'
-                ? 'bg-slate-600 text-white'
-                : 'text-slate-400 hover:text-slate-300'
+                ? 'bg-[#d97706] text-white'
+                : 'text-stone-500 hover:text-stone-700 dark:hover:text-stone-300'
             }`}
           >
             Paste / Upload
@@ -160,71 +160,67 @@ export default function DebateUpload() {
           <button
             type="button"
             onClick={() => setMode('youtube')}
-            className={`text-xs px-3 py-1.5 rounded-md font-medium transition-colors flex items-center gap-1.5 ${
+            className={`text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-full flex items-center gap-2 transition-all ${
               mode === 'youtube'
-                ? 'bg-red-700/80 text-white'
-                : 'text-slate-400 hover:text-slate-300'
+                ? 'bg-red-600 text-white'
+                : 'text-stone-500 hover:text-stone-700 dark:hover:text-stone-300'
             }`}
           >
-            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-            </svg>
             YouTube
           </button>
         </div>
 
         {/* YouTube URL input */}
         {mode === 'youtube' && (
-          <div className="space-y-3 mb-3">
+          <div className="space-y-3 mb-4">
             <div className="flex flex-col xs:flex-row gap-2">
               <input
                 type="url"
                 value={youtubeUrl}
                 onChange={e => setYoutubeUrl(e.target.value)}
                 placeholder="https://www.youtube.com/watch?v=..."
-                className="flex-1 bg-slate-800 border border-slate-600 rounded px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-red-500 transition-colors min-w-0"
+                className="flex-1 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl px-4 py-3 text-sm text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:border-red-500 transition-all shadow-inner"
               />
               <button
                 type="button"
                 onClick={fetchYouTubeTranscript}
                 disabled={fetching || !youtubeUrl.trim()}
-                className={`text-sm font-medium px-4 py-2 rounded transition-colors whitespace-nowrap flex-shrink-0 ${
+                className={`text-[10px] font-bold uppercase tracking-widest px-6 py-3 rounded-xl transition-all whitespace-nowrap flex-shrink-0 ${
                   fetching || !youtubeUrl.trim()
-                    ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
-                    : 'bg-red-700 hover:bg-red-600 text-white'
+                    ? 'bg-stone-100 dark:bg-stone-800 text-stone-400 cursor-not-allowed'
+                    : 'bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-900/10'
                 }`}
               >
                 {fetching ? (
-                  <span className="flex items-center justify-center gap-1.5">
+                  <span className="flex items-center justify-center gap-2">
                     <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                     </svg>
-                    <span className="xs:hidden">Fetching...</span>
-                    <span className="hidden xs:inline">Fetching...</span>
+                    Fetching...
                   </span>
                 ) : 'Fetch Transcript'}
               </button>
             </div>
-            <p className="text-[10px] sm:text-xs text-slate-500">
-              Works with videos that have auto-generated or manual captions enabled.
+            <p className="text-[10px] sm:text-xs text-stone-400 dark:text-stone-500 italic">
+              * Works with videos that have auto-generated or manual captions.
             </p>
           </div>
         )}
 
         {/* Transcript textarea (shared) */}
-        <div className="flex items-center justify-between mb-1">
-          <label className="text-xs font-medium text-slate-400">
-            Transcript
+        <div className="flex items-center justify-between mb-2">
+          <label className="text-[10px] font-bold text-stone-400 dark:text-stone-500 uppercase tracking-widest px-1">
+            Transcript Content
             {form.transcript && mode === 'youtube' && (
-              <span className="ml-2 text-emerald-400">✓ fetched</span>
+              <span className="ml-2 text-emerald-600 dark:text-emerald-500">✓ Fetched</span>
             )}
           </label>
           {mode === 'paste' && (
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="text-xs text-blue-400 hover:text-blue-300 transition-colors"
+              className="text-[10px] font-bold text-amber-600 dark:text-amber-500 hover:underline uppercase tracking-widest"
             >
               Upload file
             </button>
@@ -245,10 +241,10 @@ export default function DebateUpload() {
           onDragOver={e => { e.preventDefault(); setDragging(true); }}
           onDragLeave={() => setDragging(false)}
           onDrop={handleDrop}
-          className={`relative rounded border-2 border-dashed transition-colors ${
+          className={`relative rounded-2xl border-2 border-dashed transition-all duration-300 overflow-hidden ${
             dragging
-              ? 'border-blue-500 bg-blue-950/20'
-              : 'border-slate-600 hover:border-slate-500'
+              ? 'border-amber-500 bg-amber-50 dark:bg-amber-950/10'
+              : 'border-stone-200 dark:border-stone-800 hover:border-stone-300 dark:hover:border-stone-700 bg-stone-50 dark:bg-stone-950/20 shadow-inner'
           }`}
         >
           <textarea
@@ -260,23 +256,23 @@ export default function DebateUpload() {
                 : `Paste debate transcript here or drag & drop a .txt file...\n\nExample format:\nALICE: My position is that...\nBOB: I disagree because...\n\nOr with timestamps:\n[00:00] ALICE: Welcome to...\n[02:30] BOB: Thank you...`
             }
             rows={12}
-            className="w-full bg-transparent px-3 py-2.5 text-sm text-slate-300 placeholder-slate-600 focus:outline-none resize-none font-mono"
+            className="w-full bg-transparent px-4 py-4 text-sm text-stone-700 dark:text-stone-300 placeholder-stone-300 dark:placeholder-stone-700 focus:outline-none resize-none font-mono leading-relaxed"
           />
           {dragging && (
-            <div className="absolute inset-0 flex items-center justify-center bg-blue-950/50 rounded pointer-events-none">
-              <p className="text-blue-300 font-medium">Drop transcript file here</p>
+            <div className="absolute inset-0 flex items-center justify-center bg-amber-50/80 dark:bg-stone-900/80 backdrop-blur-[2px] rounded pointer-events-none">
+              <p className="text-amber-600 font-bold uppercase tracking-widest text-xs">Drop transcript here</p>
             </div>
           )}
         </div>
         {form.transcript && (
-          <p className="text-xs text-slate-500 mt-1">
-            {form.transcript.split(/\s+/).filter(Boolean).length} words
+          <p className="text-[10px] text-stone-400 font-mono mt-2 px-1">
+            {form.transcript.split(/\s+/).filter(Boolean).length} WORDS DETECTED
           </p>
         )}
       </div>
 
       {error && (
-        <p className="text-xs text-rose-400 bg-rose-900/20 border border-rose-700/40 rounded px-3 py-2">
+        <p className="text-xs text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-900/10 border border-rose-100 dark:border-rose-900/30 rounded-xl px-4 py-3 font-medium">
           {error}
         </p>
       )}
@@ -284,22 +280,22 @@ export default function DebateUpload() {
       <button
         type="submit"
         disabled={loading}
-        className={`w-full py-2.5 rounded font-semibold text-sm transition-all ${
+        className={`w-full py-4 rounded-xl font-bold text-sm uppercase tracking-widest transition-all duration-300 ${
           loading
-            ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
-            : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/30'
+            ? 'bg-stone-100 dark:bg-stone-800 text-stone-400 cursor-not-allowed'
+            : 'bg-[#d97706] hover:bg-[#b45309] text-white shadow-xl shadow-amber-900/10 hover:scale-[1.01]'
         }`}
       >
         {loading ? (
-          <span className="flex items-center justify-center gap-2">
+          <span className="flex items-center justify-center gap-3">
             <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
-            Creating debate session...
+            Initiating Analysis...
           </span>
         ) : (
-          'Analyze Debate'
+          'Begin Analysis'
         )}
       </button>
     </form>
