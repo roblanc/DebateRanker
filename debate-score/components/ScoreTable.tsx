@@ -24,22 +24,22 @@ function ScoreBar({ value }: { value: number }) {
   const pct = (value / 10) * 100;
   const color =
     value >= 8
-      ? 'bg-emerald-500'
+      ? 'bg-[#d97706]'
       : value >= 6
-      ? 'bg-blue-500'
+      ? 'bg-stone-500'
       : value >= 4
-      ? 'bg-amber-500'
-      : 'bg-rose-500';
+      ? 'bg-stone-600'
+      : 'bg-stone-700';
 
   return (
-    <div className="flex items-center gap-2">
-      <div className="flex-1 h-1.5 bg-slate-700 rounded-full overflow-hidden">
+    <div className="flex items-center gap-1.5 sm:gap-2">
+      <div className="flex-1 h-1 bg-[#222] rounded-full overflow-hidden">
         <div
-          className={`h-full rounded-full transition-all ${color}`}
+          className={`h-full rounded-full transition-all duration-500 ${color}`}
           style={{ width: `${pct}%` }}
         />
       </div>
-      <span className="text-xs font-mono w-6 text-right text-slate-300">
+      <span className="text-[10px] sm:text-xs font-mono w-5 sm:w-6 text-right text-stone-400">
         {value.toFixed(1)}
       </span>
     </div>
@@ -52,8 +52,8 @@ export default function ScoreTable({ segment, scores, debaterA, debaterB }: Scor
 
   if (!scoreA && !scoreB) {
     return (
-      <div className="text-xs text-slate-500 italic text-center py-4">
-        Scores pending...
+      <div className="text-xs text-stone-600 italic text-center py-4 font-serif">
+        Round analysis in progress...
       </div>
     );
   }
@@ -65,75 +65,77 @@ export default function ScoreTable({ segment, scores, debaterA, debaterB }: Scor
     scoreB.total_score > scoreA.total_score ? 'B' : 'tie';
 
   return (
-    <div className="bg-slate-800/50 rounded-lg border border-slate-700/50 overflow-hidden">
+    <div className="bg-[#111] rounded-2xl border border-[#222] overflow-hidden shadow-sm">
       {/* Round header */}
-      <div className="flex items-center justify-between px-3 py-2 bg-slate-700/30 border-b border-slate-700/50">
-        <div>
-          <span className="text-xs font-bold text-slate-200">
+      <div className="flex items-center justify-between px-4 py-3 bg-[#151515] border-b border-[#222]">
+        <div className="min-w-0 flex-1 mr-4">
+          <span className="text-[10px] font-bold text-stone-500 uppercase tracking-[0.2em] block mb-0.5">
             Round {segment.round_number}
           </span>
           {segment.topic && (
-            <span className="text-xs text-slate-400 ml-2">— {segment.topic}</span>
+            <h4 className="text-base font-serif text-white truncate leading-tight">
+              {segment.topic}
+            </h4>
           )}
         </div>
         {winner !== 'tie' && (
-          <span className="text-xs bg-emerald-900/50 text-emerald-300 px-2 py-0.5 rounded border border-emerald-700/50">
-            {winner === 'A' ? debaterA : debaterB} leads
+          <span className="text-[10px] font-bold uppercase tracking-widest text-[#d97706] bg-[#d97706]/5 px-3 py-1 rounded-full border border-[#d97706]/20 flex-shrink-0">
+            {winner === 'A' ? debaterA : debaterB} leading
           </span>
         )}
       </div>
 
       {/* Metric rows */}
-      <div className="p-3 space-y-2">
-        <div className="grid grid-cols-[1fr_auto_auto] gap-x-3 text-xs text-slate-500 mb-1">
-          <span>Metric</span>
-          <span className="w-24 text-center text-slate-400 font-medium truncate">{debaterA}</span>
-          <span className="w-24 text-center text-slate-400 font-medium truncate">{debaterB}</span>
+      <div className="p-3 sm:p-5 space-y-3">
+        <div className="grid grid-cols-[1fr_22%_22%] sm:grid-cols-[1fr_100px_100px] md:grid-cols-[1fr_120px_120px] gap-x-4 sm:gap-x-8 text-[10px] font-bold uppercase tracking-[0.15em] text-stone-600 mb-2 px-1">
+          <span>Dimension</span>
+          <span className="text-center truncate">{debaterA}</span>
+          <span className="text-center truncate">{debaterB}</span>
         </div>
 
         {METRICS.map(({ key, label, icon }) => (
-          <div key={key} className="grid grid-cols-[1fr_auto_auto] gap-x-3 items-center">
-            <span className="text-xs text-slate-400 flex items-center gap-1">
-              <span>{icon}</span>
+          <div key={key} className="grid grid-cols-[1fr_22%_22%] sm:grid-cols-[1fr_100px_100px] md:grid-cols-[1fr_120px_120px] gap-x-4 sm:gap-x-8 items-center px-1 group">
+            <span className="text-[11px] text-stone-400 flex items-center gap-2 min-w-0 group-hover:text-stone-200 transition-colors">
+              <span className="flex-shrink-0 opacity-50 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all">{icon}</span>
               <span className="truncate">{label}</span>
             </span>
-            <div className="w-24">
+            <div className="">
               {scoreA ? (
                 <ScoreBar value={scoreA[key] as number} />
               ) : (
-                <span className="text-xs text-slate-600">—</span>
+                <div className="h-1 bg-[#1a1a1a] rounded-full w-full" />
               )}
             </div>
-            <div className="w-24">
+            <div className="">
               {scoreB ? (
                 <ScoreBar value={scoreB[key] as number} />
               ) : (
-                <span className="text-xs text-slate-600">—</span>
+                <div className="h-1 bg-[#1a1a1a] rounded-full w-full" />
               )}
             </div>
           </div>
         ))}
 
         {/* Round total */}
-        <div className="border-t border-slate-700/50 pt-2 mt-2">
-          <div className="grid grid-cols-[1fr_auto_auto] gap-x-3 items-center">
-            <span className="text-xs font-bold text-slate-300">Round Score</span>
-            <div className="w-24 text-center">
+        <div className="border-t border-[#222] pt-4 mt-4 px-1">
+          <div className="grid grid-cols-[1fr_22%_22%] sm:grid-cols-[1fr_100px_100px] md:grid-cols-[1fr_120px_120px] gap-x-4 sm:gap-x-8 items-center">
+            <span className="text-xs font-bold text-stone-500 uppercase tracking-widest">Aggregate</span>
+            <div className="text-center">
               {scoreA && (
                 <span
-                  className={`text-sm font-bold ${
-                    winner === 'A' ? 'text-emerald-400' : 'text-slate-300'
+                  className={`text-base font-serif font-medium ${
+                    winner === 'A' ? 'text-white' : 'text-stone-500'
                   }`}
                 >
                   {scoreA.total_score.toFixed(1)}
                 </span>
               )}
             </div>
-            <div className="w-24 text-center">
+            <div className="text-center">
               {scoreB && (
                 <span
-                  className={`text-sm font-bold ${
-                    winner === 'B' ? 'text-emerald-400' : 'text-slate-300'
+                  className={`text-base font-serif font-medium ${
+                    winner === 'B' ? 'text-white' : 'text-stone-500'
                   }`}
                 >
                   {scoreB.total_score.toFixed(1)}
@@ -146,16 +148,22 @@ export default function ScoreTable({ segment, scores, debaterA, debaterB }: Scor
 
       {/* Notes */}
       {(scoreA?.notes || scoreB?.notes) && (
-        <div className="px-3 pb-3 space-y-1">
+        <div className="px-5 pb-5 space-y-3">
           {scoreA?.notes && (
-            <p className="text-xs text-slate-400">
-              <span className="text-blue-400 font-medium">{debaterA}:</span> {scoreA.notes}
-            </p>
+            <div className="flex gap-3">
+              <span className="text-[10px] font-bold text-stone-600 uppercase tracking-tighter mt-1 w-16 flex-shrink-0">{debaterA}</span>
+              <p className="text-xs text-stone-400 leading-relaxed font-sans italic opacity-80">
+                "{scoreA.notes}"
+              </p>
+            </div>
           )}
           {scoreB?.notes && (
-            <p className="text-xs text-slate-400">
-              <span className="text-violet-400 font-medium">{debaterB}:</span> {scoreB.notes}
-            </p>
+            <div className="flex gap-3">
+              <span className="text-[10px] font-bold text-stone-600 uppercase tracking-tighter mt-1 w-16 flex-shrink-0">{debaterB}</span>
+              <p className="text-xs text-stone-400 leading-relaxed font-sans italic opacity-80">
+                "{scoreB.notes}"
+              </p>
+            </div>
           )}
         </div>
       )}

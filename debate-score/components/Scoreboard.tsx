@@ -71,47 +71,47 @@ export default function Scoreboard({ debaterA, debaterB, totalA, totalB, segment
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Cumulative scoreboard */}
-      <div className="bg-slate-800/50 rounded-lg border border-slate-700/50 p-4">
-        <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
-          Cumulative Scoreboard
+      <div className="bg-[#111] rounded-2xl border border-[#222] p-5 shadow-sm">
+        <h3 className="text-[10px] font-bold text-stone-500 uppercase tracking-[0.2em] mb-4">
+          Scholarly Standing
         </h3>
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-4">
           {[
-            { name: debaterA, score: totalA, isWinner: winner === debaterA, color: 'blue' },
-            { name: debaterB, score: totalB, isWinner: winner === debaterB, color: 'violet' },
+            { name: debaterA, score: totalA, isWinner: winner === debaterA, color: 'amber' },
+            { name: debaterB, score: totalB, isWinner: winner === debaterB, color: 'stone' },
           ].map(d => (
             <div
               key={d.name}
-              className={`flex-1 rounded-lg p-3 border ${
+              className={`flex-1 rounded-xl p-4 border transition-all duration-500 ${
                 d.isWinner
-                  ? 'bg-emerald-900/20 border-emerald-700/50'
-                  : 'bg-slate-700/30 border-slate-600/50'
+                  ? 'bg-amber-900/5 border-amber-900/30'
+                  : 'bg-[#1a1a1a] border-[#2a2a2a]'
               }`}
             >
-              <div className="flex items-start justify-between">
-                <div>
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0 flex-1">
                   <p
-                    className={`text-sm font-bold truncate ${
-                      d.color === 'blue' ? 'text-blue-400' : 'text-violet-400'
+                    className={`text-xs font-bold uppercase tracking-widest truncate ${
+                      d.color === 'amber' ? 'text-amber-500' : 'text-stone-400'
                     }`}
                   >
                     {d.name}
                   </p>
-                  <p className="text-2xl font-black text-white mt-1">
+                  <p className="text-3xl font-serif text-white mt-1">
                     {d.score.toFixed(1)}
-                    <span className="text-xs text-slate-400 font-normal ml-1">/ 10</span>
+                    <span className="text-[10px] text-stone-600 font-sans font-normal ml-1">/ 10</span>
                   </p>
                 </div>
                 {d.isWinner && (
-                  <span className="text-lg" title="Leading">🏆</span>
+                  <span className="text-lg opacity-80" title="Leading">🏆</span>
                 )}
               </div>
-              <div className="mt-2 h-1 bg-slate-700 rounded-full overflow-hidden">
+              <div className="mt-3 h-1 bg-[#222] rounded-full overflow-hidden">
                 <div
-                  className={`h-full rounded-full ${
-                    d.color === 'blue' ? 'bg-blue-500' : 'bg-violet-500'
+                  className={`h-full rounded-full transition-all duration-700 ${
+                    d.color === 'amber' ? 'bg-amber-600' : 'bg-stone-500'
                   }`}
                   style={{ width: `${(d.score / 10) * 100}%` }}
                 />
@@ -123,35 +123,36 @@ export default function Scoreboard({ debaterA, debaterB, totalA, totalB, segment
 
       {/* Line chart: round progression */}
       {lineData.length > 1 && (
-        <div className="bg-slate-800/50 rounded-lg border border-slate-700/50 p-4">
-          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
-            Round Progression
+        <div className="bg-[#111] rounded-2xl border border-[#222] p-5 shadow-sm">
+          <h3 className="text-[10px] font-bold text-stone-500 uppercase tracking-[0.2em] mb-4">
+            Argumentative Progression
           </h3>
           <ResponsiveContainer width="100%" height={160}>
-            <LineChart data={lineData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-              <XAxis dataKey="name" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-              <YAxis domain={[0, 10]} tick={{ fill: '#94a3b8', fontSize: 10 }} />
+            <LineChart data={lineData} margin={{ top: 5, right: 5, left: -30, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#1a1a1a" vertical={false} />
+              <XAxis dataKey="name" tick={{ fill: '#57534e', fontSize: 10, fontWeight: 'bold' }} axisLine={false} tickLine={false} />
+              <YAxis domain={[0, 10]} tick={{ fill: '#57534e', fontSize: 10 }} axisLine={false} tickLine={false} />
               <Tooltip
-                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '6px' }}
-                labelStyle={{ color: '#94a3b8', fontSize: '11px' }}
-                itemStyle={{ fontSize: '11px' }}
+                contentStyle={{ backgroundColor: '#151515', border: '1px solid #222', borderRadius: '12px', fontSize: '11px', fontFamily: 'var(--sans)' }}
+                itemStyle={{ padding: '2px 0' }}
               />
-              <Legend wrapperStyle={{ fontSize: '10px' }} />
+              <Legend wrapperStyle={{ fontSize: '10px', fontWeight: 'bold', paddingTop: '10px' }} iconType="circle" />
               <Line
                 type="monotone"
                 dataKey={debaterA}
-                stroke="#60a5fa"
-                strokeWidth={2}
-                dot={{ fill: '#60a5fa', r: 3 }}
+                stroke="#d97706"
+                strokeWidth={2.5}
+                dot={{ fill: '#d97706', r: 3, strokeWidth: 0 }}
+                activeDot={{ r: 5, strokeWidth: 0 }}
                 connectNulls={false}
               />
               <Line
                 type="monotone"
                 dataKey={debaterB}
-                stroke="#a78bfa"
-                strokeWidth={2}
-                dot={{ fill: '#a78bfa', r: 3 }}
+                stroke="#57534e"
+                strokeWidth={2.5}
+                dot={{ fill: '#57534e', r: 3, strokeWidth: 0 }}
+                activeDot={{ r: 5, strokeWidth: 0 }}
                 connectNulls={false}
               />
             </LineChart>
@@ -161,37 +162,36 @@ export default function Scoreboard({ debaterA, debaterB, totalA, totalB, segment
 
       {/* Radar chart */}
       {radarData.length > 0 && (
-        <div className="bg-slate-800/50 rounded-lg border border-slate-700/50 p-4">
-          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
-            Performance Profile
+        <div className="bg-[#111] rounded-2xl border border-[#222] p-5 shadow-sm">
+          <h3 className="text-[10px] font-bold text-stone-500 uppercase tracking-[0.2em] mb-4">
+            Intellectual Profile
           </h3>
-          <ResponsiveContainer width="100%" height={200}>
+          <ResponsiveContainer width="100%" height={220}>
             <RadarChart data={radarData}>
-              <PolarGrid stroke="#334155" />
+              <PolarGrid stroke="#1a1a1a" />
               <PolarAngleAxis
                 dataKey="metric"
-                tick={{ fill: '#94a3b8', fontSize: 9 }}
+                tick={{ fill: '#57534e', fontSize: 9, fontWeight: 'bold' }}
               />
               <Radar
                 name={debaterA}
                 dataKey={debaterA}
-                stroke="#60a5fa"
-                fill="#60a5fa"
-                fillOpacity={0.15}
-                strokeWidth={1.5}
+                stroke="#d97706"
+                fill="#d97706"
+                fillOpacity={0.1}
+                strokeWidth={2}
               />
               <Radar
                 name={debaterB}
                 dataKey={debaterB}
-                stroke="#a78bfa"
-                fill="#a78bfa"
-                fillOpacity={0.15}
-                strokeWidth={1.5}
+                stroke="#57534e"
+                fill="#57534e"
+                fillOpacity={0.1}
+                strokeWidth={2}
               />
-              <Legend wrapperStyle={{ fontSize: '10px' }} />
+              <Legend wrapperStyle={{ fontSize: '10px', fontWeight: 'bold' }} iconType="circle" />
               <Tooltip
-                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '6px' }}
-                itemStyle={{ fontSize: '11px' }}
+                contentStyle={{ backgroundColor: '#151515', border: '1px solid #222', borderRadius: '12px', fontSize: '11px' }}
               />
             </RadarChart>
           </ResponsiveContainer>

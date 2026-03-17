@@ -176,36 +176,37 @@ export default function DebateUpload() {
         {/* YouTube URL input */}
         {mode === 'youtube' && (
           <div className="space-y-3 mb-3">
-            <div className="flex gap-2">
+            <div className="flex flex-col xs:flex-row gap-2">
               <input
                 type="url"
                 value={youtubeUrl}
                 onChange={e => setYoutubeUrl(e.target.value)}
                 placeholder="https://www.youtube.com/watch?v=..."
-                className="flex-1 bg-slate-800 border border-slate-600 rounded px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-red-500 transition-colors"
+                className="flex-1 bg-slate-800 border border-slate-600 rounded px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-red-500 transition-colors min-w-0"
               />
               <button
                 type="button"
                 onClick={fetchYouTubeTranscript}
                 disabled={fetching || !youtubeUrl.trim()}
-                className={`text-sm font-medium px-4 py-2 rounded transition-colors whitespace-nowrap ${
+                className={`text-sm font-medium px-4 py-2 rounded transition-colors whitespace-nowrap flex-shrink-0 ${
                   fetching || !youtubeUrl.trim()
                     ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
                     : 'bg-red-700 hover:bg-red-600 text-white'
                 }`}
               >
                 {fetching ? (
-                  <span className="flex items-center gap-1.5">
+                  <span className="flex items-center justify-center gap-1.5">
                     <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                     </svg>
-                    Fetching...
+                    <span className="xs:hidden">Fetching...</span>
+                    <span className="hidden xs:inline">Fetching...</span>
                   </span>
                 ) : 'Fetch Transcript'}
               </button>
             </div>
-            <p className="text-xs text-slate-500">
+            <p className="text-[10px] sm:text-xs text-slate-500">
               Works with videos that have auto-generated or manual captions enabled.
             </p>
           </div>

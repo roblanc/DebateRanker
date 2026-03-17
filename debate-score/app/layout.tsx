@@ -1,5 +1,17 @@
 import type { Metadata } from "next";
+import { Inter, Instrument_Serif } from "next/font/google";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
+
+const instrumentSerif = Instrument_Serif({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-serif",
+});
 
 export const metadata: Metadata = {
   title: "DebateRank — AI Debate Analysis",
@@ -12,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="bg-slate-950 text-slate-100 min-h-screen antialiased" style={{ fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+    <html lang="en" className={`${inter.variable} ${instrumentSerif.variable}`}>
+      <body className="bg-[#0a0a0a] text-[#d1d1d1] min-h-screen antialiased font-sans">
         {children}
       </body>
     </html>

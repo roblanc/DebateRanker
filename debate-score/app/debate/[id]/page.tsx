@@ -12,7 +12,7 @@ import { DebateWithDetails, Moment } from '@/types';
 // Dynamic import to avoid SSR issues with ReactFlow
 const ArgumentMap = dynamic(() => import('@/components/ArgumentMap'), { ssr: false });
 
-type TabType = 'scores' | 'map' | 'moments';
+type TabType = 'transcript' | 'scores' | 'map' | 'moments';
 
 export default function DebatePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -100,57 +100,57 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
   const isAnalyzing = debate.status === 'analyzing' || debate.status === 'pending';
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[#0a0a0a]">
       {/* Top bar */}
-      <header className="border-b border-slate-800 bg-slate-900/70 backdrop-blur-sm sticky top-0 z-50">
-        <div className="flex items-center gap-3 px-4 py-2.5">
-          <Link href="/" className="text-slate-400 hover:text-white transition-colors flex-shrink-0">
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <header className="border-b border-[#1a1a1a] bg-[#0d0d0d]/80 backdrop-blur-md sticky top-0 z-50">
+        <div className="flex items-center gap-2 sm:gap-4 px-3 sm:px-6 py-3">
+          <Link href="/" className="text-stone-500 hover:text-[#d97706] transition-colors flex-shrink-0">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
           </Link>
 
           <div className="flex-1 min-w-0">
-            <h1 className="font-bold text-white text-sm truncate">{debate.title}</h1>
-            <p className="text-xs text-slate-400">
-              <span className="text-blue-400">{debate.debater_a}</span>
-              <span className="mx-1.5 text-slate-600">vs</span>
-              <span className="text-violet-400">{debate.debater_b}</span>
+            <h1 className="font-serif font-medium text-white text-base sm:text-lg truncate tracking-tight">{debate.title}</h1>
+            <p className="text-[10px] sm:text-xs text-stone-500 font-sans uppercase tracking-wider truncate mt-0.5">
+              <span className="text-amber-200/60">{debate.debater_a}</span>
+              <span className="mx-2 opacity-30 text-white">vs</span>
+              <span className="text-amber-200/60">{debate.debater_b}</span>
               {debate.segments.length > 0 && (
-                <span className="text-slate-600 ml-2">· {debate.segments.length} rounds</span>
+                <span className="hidden sm:inline opacity-30 text-white ml-2">· {debate.segments.length} rounds</span>
               )}
             </p>
           </div>
 
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
             {isAnalyzing && (
-              <span className="flex items-center gap-1.5 text-xs text-amber-400 bg-amber-900/20 border border-amber-700/40 px-2 py-1 rounded">
-                <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none">
+              <span className="flex items-center gap-1.5 text-[10px] sm:text-xs text-amber-500 bg-amber-900/10 border border-amber-900/30 px-2 sm:px-3 py-1 rounded-full font-bold uppercase tracking-tighter">
+                <svg className="animate-spin h-2.5 w-2.5 sm:h-3 sm:w-3" viewBox="0 0 24 24" fill="none">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                 </svg>
-                Analyzing...
+                <span className="hidden xs:inline">Analyzing</span>
               </span>
             )}
             {(debate.status === 'error' || debate.status === 'analyzing') && (
               <button
                 onClick={handleReanalyze}
-                className="text-xs text-rose-400 hover:text-rose-300 border border-rose-700/40 px-2 py-1 rounded transition-colors"
+                className="text-[10px] sm:text-xs text-rose-500 hover:text-rose-400 border border-rose-900/30 bg-rose-900/10 px-2 sm:px-3 py-1 rounded-full font-bold uppercase tracking-tighter transition-colors"
               >
-                Retry analysis
+                Retry
               </button>
             )}
             {debate.status === 'complete' && (
-              <div className="flex gap-1">
+              <div className="flex gap-2">
                 <button
                   onClick={() => handleExport('csv')}
-                  className="text-xs text-slate-400 hover:text-white border border-slate-600 px-2 py-1 rounded transition-colors"
+                  className="text-[10px] sm:text-xs text-stone-400 hover:text-white border border-[#2a2a2a] px-2 sm:px-3 py-1 rounded-full transition-colors font-bold uppercase tracking-tighter"
                 >
                   CSV
                 </button>
                 <button
                   onClick={() => handleExport('json')}
-                  className="text-xs text-slate-400 hover:text-white border border-slate-600 px-2 py-1 rounded transition-colors"
+                  className="text-[10px] sm:text-xs text-stone-400 hover:text-white border border-[#2a2a2a] px-2 sm:px-3 py-1 rounded-full transition-colors font-bold uppercase tracking-tighter"
                 >
                   JSON
                 </button>
@@ -160,10 +160,10 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
         </div>
       </header>
 
-      {/* Main layout: left transcript | right panel */}
-      <div className="flex-1 flex overflow-hidden" style={{ height: 'calc(100vh - 57px)' }}>
-        {/* Left: Transcript */}
-        <div className="w-80 flex-shrink-0 border-r border-slate-800 p-4 overflow-hidden flex flex-col">
+      {/* Main layout: left transcript (desktop only) | right panel */}
+      <div className="flex-1 flex flex-col md:flex-row overflow-hidden md:h-[calc(100vh-65px)]">
+        {/* Left: Transcript (Hidden on mobile, uses tab instead) */}
+        <div className="hidden md:flex w-80 lg:w-96 flex-shrink-0 border-r border-[#1a1a1a] p-6 overflow-hidden flex-col bg-[#0d0d0d]">
           <TranscriptViewer
             transcript={debate.transcript}
             segments={debate.segments}
@@ -173,50 +173,62 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
         </div>
 
         {/* Right: Analysis panel */}
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 flex flex-col overflow-hidden bg-[#0a0a0a]">
           {/* Tab nav */}
-          <div className="flex items-center gap-1 px-4 pt-3 pb-0 border-b border-slate-800">
+          <div className="flex items-center gap-1 px-3 sm:px-6 pt-4 pb-0 border-b border-[#1a1a1a] overflow-x-auto no-scrollbar bg-[#0d0d0d]">
             {([
-              { key: 'scores', label: 'Score Tables', icon: '📊' },
-              { key: 'map', label: 'Argument Map', icon: '🗺️' },
-              { key: 'moments', label: `Moments (${allMoments.length})`, icon: '💥' },
-            ] as { key: TabType; label: string; icon: string }[]).map(tab => (
+              { key: 'transcript', label: 'Transcript', icon: '📄', mobileOnly: true },
+              { key: 'scores', label: 'Analysis', icon: '📊' },
+              { key: 'map', label: 'Structure', icon: '🗺️' },
+              { key: 'moments', label: `Moments`, icon: '💥' },
+            ] as { key: TabType; label: string; icon: string; mobileOnly?: boolean }[]).map(tab => (
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-t border-b-2 transition-colors ${
+                className={`flex items-center gap-2 px-4 py-3 text-xs font-bold uppercase tracking-widest rounded-t-lg border-b-2 transition-all duration-300 whitespace-nowrap ${
+                  tab.mobileOnly ? 'md:hidden' : ''
+                } ${
                   activeTab === tab.key
-                    ? 'border-blue-500 text-blue-400 bg-blue-950/20'
-                    : 'border-transparent text-slate-400 hover:text-slate-200'
+                    ? 'border-[#d97706] text-[#d97706] bg-[#d97706]/5'
+                    : 'border-transparent text-stone-500 hover:text-stone-300'
                 }`}
               >
-                <span>{tab.icon}</span>
                 {tab.label}
               </button>
             ))}
 
-            {/* Scoreboard always visible at right */}
-            <div className="ml-auto flex items-center gap-3 pb-1 text-xs">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-blue-400" />
-                <span className="text-slate-300 font-medium">{debate.debater_a}</span>
-                <span className="font-bold text-blue-400">{debate.totals.debater_a.toFixed(1)}</span>
+            {/* Scoreboard totals at right */}
+            <div className="hidden lg:flex ml-auto items-center gap-6 pb-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest border-l border-[#1a1a1a] pl-6">
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(217,119,6,0.5)]" />
+                <span className="text-stone-400 truncate max-w-[100px]">{debate.debater_a}</span>
+                <span className="text-white">{debate.totals.debater_a.toFixed(1)}</span>
               </div>
-              <span className="text-slate-600">vs</span>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-violet-400" />
-                <span className="text-slate-300 font-medium">{debate.debater_b}</span>
-                <span className="font-bold text-violet-400">{debate.totals.debater_b.toFixed(1)}</span>
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-stone-600" />
+                <span className="text-stone-400 truncate max-w-[100px]">{debate.debater_b}</span>
+                <span className="text-white">{debate.totals.debater_b.toFixed(1)}</span>
               </div>
             </div>
           </div>
 
           {/* Tab content */}
-          <div className="flex-1 overflow-hidden">
+          <div className="flex-1 overflow-y-auto md:overflow-hidden">
+            {activeTab === 'transcript' && (
+              <div className="md:hidden h-full p-4">
+                <TranscriptViewer
+                  transcript={debate.transcript}
+                  segments={debate.segments}
+                  activeSegment={activeSegment}
+                  onSegmentClick={setActiveSegment}
+                />
+              </div>
+            )}
+
             {activeTab === 'scores' && (
-              <div className="h-full flex gap-4 overflow-hidden p-4">
+              <div className="h-full flex flex-col lg:flex-row gap-4 overflow-y-auto md:overflow-hidden p-3 sm:p-4">
                 {/* Score tables */}
-                <div className="flex-1 overflow-y-auto space-y-4">
+                <div className="flex-1 md:overflow-y-auto space-y-4">
                   {isAnalyzing && debate.segments.length === 0 && (
                     <div className="flex flex-col items-center justify-center py-16 text-slate-400">
                       <svg className="animate-spin h-8 w-8 mb-3" viewBox="0 0 24 24" fill="none">
@@ -239,7 +251,7 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
                 </div>
 
                 {/* Scoreboard sidebar */}
-                <div className="w-72 flex-shrink-0 overflow-y-auto">
+                <div className="w-full lg:w-72 flex-shrink-0 lg:overflow-y-auto">
                   <Scoreboard
                     debaterA={debate.debater_a}
                     debaterB={debate.debater_b}
@@ -252,7 +264,7 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
             )}
 
             {activeTab === 'map' && (
-              <div className="h-full p-4">
+              <div className="h-[400px] md:h-full p-3 sm:p-4">
                 <ArgumentMap
                   nodes={debate.argument_nodes}
                   edges={debate.argument_edges}
@@ -263,8 +275,8 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
             )}
 
             {activeTab === 'moments' && (
-              <div className="h-full overflow-y-auto p-4">
-                <div className="max-w-2xl">
+              <div className="h-full overflow-y-auto p-3 sm:p-4">
+                <div className="max-w-2xl mx-auto md:mx-0">
                   {isAnalyzing && allMoments.length === 0 ? (
                     <p className="text-slate-500 text-sm italic">
                       Key moments will appear as analysis completes...
@@ -285,8 +297,8 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
 
       {/* Bottom scoreboard strip */}
       {debate.status === 'complete' && debate.segments.length > 0 && (
-        <div className="border-t border-slate-800 bg-slate-900/50 px-4 py-2 flex items-center gap-6 text-xs overflow-x-auto">
-          <span className="text-slate-500 flex-shrink-0 font-medium uppercase tracking-wider">
+        <div className="border-t border-slate-800 bg-slate-900/50 px-3 sm:px-4 py-2 flex items-center gap-3 sm:gap-6 text-[10px] sm:text-xs overflow-x-auto no-scrollbar">
+          <span className="text-slate-500 flex-shrink-0 font-medium uppercase tracking-wider hidden xs:inline">
             Cumulative
           </span>
           {debate.segments.map(seg => {
@@ -302,7 +314,7 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
                   setActiveSegment(seg.id);
                   setActiveTab('scores');
                 }}
-                className={`flex-shrink-0 flex flex-col items-center gap-0.5 px-3 py-1 rounded transition-colors ${
+                className={`flex-shrink-0 flex flex-col items-center gap-0.5 px-2.5 sm:px-3 py-1 rounded transition-colors ${
                   activeSegment === seg.id
                     ? 'bg-slate-700'
                     : 'hover:bg-slate-800'
@@ -321,8 +333,8 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
               </button>
             );
           })}
-          <div className="ml-auto flex-shrink-0 flex items-center gap-2 border-l border-slate-700 pl-4">
-            <span className="text-slate-500">Final</span>
+          <div className="ml-auto flex-shrink-0 flex items-center gap-2 border-l border-slate-700 pl-3 sm:pl-4">
+            <span className="text-slate-500 hidden xs:inline">Final</span>
             <span className="text-blue-400 font-bold">{debate.totals.debater_a.toFixed(1)}</span>
             <span className="text-slate-600">—</span>
             <span className="text-violet-400 font-bold">{debate.totals.debater_b.toFixed(1)}</span>

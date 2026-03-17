@@ -1,37 +1,29 @@
 @import "tailwindcss";
 
-* {
-  box-sizing: border-box;
-}
-
 :root {
-  color-scheme: dark;
+  --background: #0d0d0d;
+  --foreground: #d1d1d1;
+  --card-bg: #151515;
+  --accent: #d97706; /* Warm amber/gold */
+  --border: #222222;
+  --serif: var(--font-serif), serif;
+  --sans: var(--font-inter), sans-serif;
 }
 
 body {
-  background: #020817;
-  color: #e2e8f0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--sans);
 }
 
-/* ReactFlow dark theme overrides */
-.react-flow__attribution {
-  display: none;
-}
-
-.react-flow__controls-button {
-  background: #1e293b !important;
-  border-color: #334155 !important;
-  color: #94a3b8 !important;
-}
-
-.react-flow__controls-button:hover {
-  background: #334155 !important;
+h1, h2, h3, .font-serif {
+  font-family: var(--serif);
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -39,18 +31,44 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 3px;
+  background: #2a2a2a;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #3a3a3a;
 }
 
-/* Line clamp utility */
-.line-clamp-4 {
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Claude UI elements */
+.claude-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.claude-accent-text {
+  color: var(--accent);
+}
+
+.claude-border {
+  border-color: var(--border);
+}
+
+/* ReactFlow dark theme overrides */
+.react-flow__attribution {
+  display: none;
+}
+.react-flow__controls-button {
+  background: #1e1e1e !important;
+  border-color: #2e2e2e !important;
+  color: #a1a1a1 !important;
 }

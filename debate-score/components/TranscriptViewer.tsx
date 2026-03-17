@@ -20,76 +20,74 @@ export default function TranscriptViewer({
 
   const getSegmentColor = (index: number) => {
     const colors = [
-      'border-l-blue-400 bg-blue-950/20',
-      'border-l-violet-400 bg-violet-950/20',
-      'border-l-emerald-400 bg-emerald-950/20',
-      'border-l-amber-400 bg-amber-950/20',
-      'border-l-rose-400 bg-rose-950/20',
-      'border-l-cyan-400 bg-cyan-950/20',
+      'border-l-amber-500/50 bg-amber-500/5',
+      'border-l-stone-500/50 bg-stone-500/5',
+      'border-l-orange-500/50 bg-orange-500/5',
+      'border-l-yellow-600/50 bg-yellow-600/5',
     ];
     return colors[index % colors.length];
   };
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between mb-3 px-1">
-        <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider">
+      <div className="flex items-center justify-between mb-6 px-1">
+        <h2 className="text-xs font-bold text-stone-500 uppercase tracking-[0.2em]">
           Transcript
         </h2>
-        <div className="flex gap-1 bg-slate-800 rounded p-0.5">
+        <div className="flex gap-1 bg-[#1a1a1a] rounded-full p-1 border border-[#2a2a2a]">
           {(['segments', 'full'] as const).map(v => (
             <button
               key={v}
               onClick={() => setView(v)}
-              className={`px-2 py-0.5 text-xs rounded transition-colors ${
+              className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full transition-all ${
                 view === v
-                  ? 'bg-slate-600 text-white'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-[#d97706] text-[#0d0d0d]'
+                  : 'text-stone-500 hover:text-stone-300'
               }`}
             >
-              {v === 'segments' ? 'By Round' : 'Full'}
+              {v === 'segments' ? 'Rounds' : 'Full'}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto space-y-3 pr-1">
+      <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
         {view === 'segments' && segments.length > 0 ? (
           segments.map((seg, i) => (
             <div
               key={seg.id}
               onClick={() => onSegmentClick?.(seg.id)}
-              className={`border-l-2 pl-3 py-2 rounded-r cursor-pointer transition-all ${getSegmentColor(i)} ${
+              className={`border-l-2 pl-4 py-3 rounded-r-xl cursor-pointer transition-all duration-300 ${getSegmentColor(i)} ${
                 activeSegment === seg.id
-                  ? 'ring-1 ring-slate-500'
-                  : 'hover:brightness-110'
+                  ? 'ring-1 ring-amber-500/30 border-l-amber-500'
+                  : 'hover:bg-white/5 border-transparent'
               }`}
             >
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs font-bold text-slate-300">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">
                   Round {seg.round_number}
                 </span>
                 {seg.start_time && (
-                  <span className="text-xs text-slate-500">[{seg.start_time}]</span>
-                )}
-                {seg.topic && (
-                  <span className="text-xs text-slate-400 italic truncate">
-                    — {seg.topic}
-                  </span>
+                  <span className="text-[10px] font-mono text-stone-600">[{seg.start_time}]</span>
                 )}
               </div>
-              <p className="text-xs text-slate-300 leading-relaxed line-clamp-4 whitespace-pre-wrap">
+              {seg.topic && (
+                <h4 className="text-sm font-serif text-white mb-2 leading-tight">
+                  {seg.topic}
+                </h4>
+              )}
+              <p className="text-xs text-stone-400 leading-relaxed line-clamp-4 whitespace-pre-wrap font-sans opacity-80">
                 {seg.content}
               </p>
               {seg.summary && (
-                <p className="mt-2 text-xs text-slate-400 italic border-t border-slate-700/50 pt-1">
+                <div className="mt-3 text-[11px] text-amber-200/50 italic border-t border-white/5 pt-2 leading-snug">
                   {seg.summary}
-                </p>
+                </div>
               )}
             </div>
           ))
         ) : (
-          <div className="text-xs text-slate-300 leading-relaxed whitespace-pre-wrap">
+          <div className="text-sm text-stone-400 leading-relaxed whitespace-pre-wrap font-sans opacity-80 px-1">
             {transcript}
           </div>
         )}
