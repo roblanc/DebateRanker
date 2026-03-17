@@ -46,7 +46,7 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
     if (!debate) return;
     if (debate.status !== 'analyzing' && debate.status !== 'pending') return;
 
-    const timer = setInterval(fetchDebate, 3000);
+    const timer = setInterval(fetchDebate, 2000);
     return () => clearInterval(timer);
   }, [debate, fetchDebate]);
 
@@ -66,12 +66,15 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
   const handleReanalyze = async () => {
     setRetrying(true);
     try {
-      await fetch('/api/analyze', {
+      const res = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ debate_id: id }),
       });
+      if (!res.ok) throw new Error('Failed to start analysis');
       await fetchDebate();
+    } catch (err) {
+      console.error(err);
     } finally {
       setRetrying(false);
     }
@@ -79,13 +82,13 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="flex flex-col items-center gap-3 text-slate-400">
-          <svg className="animate-spin h-8 w-8" viewBox="0 0 24 24" fill="none">
+      <div className="min-h-screen flex items-center justify-center bg-[#fdfdfc] dark:bg-[#0a0a0a]">
+        <div className="flex flex-col items-center gap-4 text-stone-400">
+          <svg className="animate-spin h-8 w-8 text-amber-600 dark:text-amber-500" viewBox="0 0 24 24" fill="none">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
-          <span className="text-sm">Loading debate...</span>
+          <span className="text-sm font-serif italic tracking-wide">Retrieving session data...</span>
         </div>
       </div>
     );
@@ -93,11 +96,17 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
 
   if (error || !debate) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-rose-400 mb-4">{error || 'Debate not found'}</p>
-          <Link href="/" className="text-blue-400 hover:text-blue-300 text-sm">
-            ← Back to home
+      <div className="min-h-screen flex items-center justify-center bg-[#fdfdfc] dark:bg-[#0a0a0a]">
+        <div className="text-center max-w-md px-6">
+          <div className="text-rose-500 mb-6 flex justify-center">
+            <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-serif text-stone-900 dark:text-white mb-2">Analysis Unavailable</h2>
+          <p className="text-stone-500 mb-8 leading-relaxed">{error || 'The requested debate analysis could not be located in our archives.'}</p>
+          <Link href="/" className="bg-stone-900 dark:bg-stone-800 text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-stone-800 transition-colors">
+            Return to Dashboard
           </Link>
         </div>
       </div>
@@ -132,7 +141,7 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
           <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
             <ThemeToggle />
             {isAnalyzing && (
-              <span className="flex items-center gap-1.5 text-[10px] sm:text-xs text-amber-500 bg-amber-900/10 border border-amber-900/30 px-2 sm:px-3 py-1 rounded-full font-bold uppercase tracking-tighter">
+              <span className="flex items-center gap-1.5 text-[10px] sm:text-xs text-amber-600 dark:text-amber-500 bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-900/30 px-2 sm:px-3 py-1 rounded-full font-bold uppercase tracking-tighter">
                 <svg className="animate-spin h-2.5 w-2.5 sm:h-3 sm:w-3" viewBox="0 0 24 24" fill="none">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -140,11 +149,11 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
                 <span className="hidden xs:inline">Analyzing</span>
               </span>
             )}
-            {(debate.status === 'error' || debate.status === 'analyzing') && (
+            {(debate.status === 'error' || (debate.status === 'analyzing' && !retrying)) && (
               <button
                 onClick={handleReanalyze}
                 disabled={retrying}
-                className="text-[10px] sm:text-xs text-rose-500 hover:text-rose-400 border border-rose-900/30 bg-rose-900/10 px-2 sm:px-4 py-1 rounded-full font-bold uppercase tracking-tighter transition-all flex items-center gap-1.5"
+                className="text-[10px] sm:text-xs text-rose-600 dark:text-rose-500 hover:text-rose-500 dark:hover:text-rose-400 border border-rose-200 dark:border-rose-900/30 bg-rose-50 dark:bg-rose-900/10 px-2 sm:px-4 py-1 rounded-full font-bold uppercase tracking-tighter transition-all flex items-center gap-1.5"
               >
                 {retrying ? (
                   <>
@@ -163,13 +172,13 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
               <div className="flex gap-2">
                 <button
                   onClick={() => handleExport('csv')}
-                  className="text-[10px] sm:text-xs text-stone-400 hover:text-white border border-[#2a2a2a] px-2 sm:px-3 py-1 rounded-full transition-colors font-bold uppercase tracking-tighter"
+                  className="text-[10px] sm:text-xs text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white border border-stone-200 dark:border-[#2a2a2a] px-2 sm:px-3 py-1 rounded-full transition-colors font-bold uppercase tracking-tighter"
                 >
                   CSV
                 </button>
                 <button
                   onClick={() => handleExport('json')}
-                  className="text-[10px] sm:text-xs text-stone-400 hover:text-white border border-[#2a2a2a] px-2 sm:px-3 py-1 rounded-full transition-colors font-bold uppercase tracking-tighter"
+                  className="text-[10px] sm:text-xs text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white border border-stone-200 dark:border-[#2a2a2a] px-2 sm:px-3 py-1 rounded-full transition-colors font-bold uppercase tracking-tighter"
                 >
                   JSON
                 </button>
@@ -249,13 +258,20 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
                 {/* Score tables */}
                 <div className="flex-1 md:overflow-y-auto space-y-4">
                   {isAnalyzing && debate.segments.length === 0 && (
-                    <div className="flex flex-col items-center justify-center py-16 text-slate-400">
-                      <svg className="animate-spin h-8 w-8 mb-3" viewBox="0 0 24 24" fill="none">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                      </svg>
-                      <p className="text-sm">AI is analyzing the transcript...</p>
-                      <p className="text-xs text-slate-500 mt-1">This may take 30–90 seconds</p>
+                    <div className="flex flex-col items-center justify-center py-24 text-stone-400 dark:text-stone-500">
+                      <div className="relative mb-6">
+                        <div className="absolute inset-0 rounded-full bg-amber-500/20 animate-ping" />
+                        <div className="relative bg-amber-500/10 border border-amber-500/30 rounded-full p-4">
+                          <svg className="animate-spin h-8 w-8 text-amber-600 dark:text-amber-500" viewBox="0 0 24 24" fill="none">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                          </svg>
+                        </div>
+                      </div>
+                      <h3 className="font-serif text-xl text-stone-900 dark:text-white mb-2">Analyzing Discourse</h3>
+                      <p className="text-sm font-sans max-w-xs text-center opacity-70 leading-relaxed">
+                        Claude is currently evaluating the transcript's logic and structure. This process typically takes 30–60 seconds.
+                      </p>
                     </div>
                   )}
                   {debate.segments.map(seg => (
@@ -297,8 +313,8 @@ export default function DebatePage({ params }: { params: Promise<{ id: string }>
               <div className="h-full overflow-y-auto p-3 sm:p-4">
                 <div className="max-w-2xl mx-auto md:mx-0">
                   {isAnalyzing && allMoments.length === 0 ? (
-                    <p className="text-slate-500 text-sm italic">
-                      Key moments will appear as analysis completes...
+                    <p className="text-stone-500 text-sm italic font-serif py-12 text-center">
+                      Key moments will appear as analytical processing completes...
                     </p>
                   ) : (
                     <MomentsPanel
