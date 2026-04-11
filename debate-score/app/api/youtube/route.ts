@@ -14,9 +14,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Could not extract video ID from URL' }, { status: 400 });
     }
 
-    const transcript = await fetchYouTubeTranscript(videoId);
+    const [transcript, titleRes] = await Promise.allSettled([
+      fetchYouTubeTranscript(videoId),
+      fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`),
+    ]);
 
-    return NextResponse.json({ transcript, videoId });
+    if (transcript.status === 'rejected') throw transcript.reason;
+
+    let title: string | null = null;
+    if (titleRes.status === 'fulfilled' && titleRes.value.ok) {
+      const json = await titleRes.value.json();
+      title = json.title ?? null;
+    }
+
+    return NextResponse.json({ transcript: transcript.value, videoId, title });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Failed to fetch transcript';
     // youtube-transcript throws if captions are disabled or video doesn't exist
