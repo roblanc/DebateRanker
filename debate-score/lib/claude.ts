@@ -1,9 +1,15 @@
 import { SegmentAnalysis } from '@/types';
 
 // OpenRouter — OpenAI-compatible API
-// Free models: google/gemini-2.0-flash-exp:free, meta-llama/llama-3.3-70b-instruct:free
+// Free model fallback chain (checked 2026-04-11, update periodically via: curl https://openrouter.ai/api/v1/models | python3 -c "import sys,json; [print(m['id']) for m in json.load(sys.stdin)['data'] if ':free' in m['id']]")
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const MODEL = process.env.OPENROUTER_MODEL || 'google/gemini-2.0-flash-exp:free';
+const FREE_MODEL_FALLBACKS = [
+  process.env.OPENROUTER_MODEL,
+  'qwen/qwen3-next-80b-a3b-instruct:free',
+  'nvidia/nemotron-3-super-120b-a12b:free',
+  'nousresearch/hermes-3-llama-3.1-405b:free',
+  'meta-llama/llama-3.3-70b-instruct:free',
+].filter(Boolean) as string[];
 
 export const SYSTEM_PROMPT = `You are an expert debate analyst and rhetorical scholar. Your role is to objectively evaluate debate segments based purely on debate mechanics — logic, evidence quality, rhetorical structure, and argumentation. You do NOT evaluate political positions, ideological correctness, or factual accuracy of claims (only whether they are logically supported within the debate).
 
@@ -103,37 +109,57 @@ export async function analyzeSegment(
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) throw new Error('OPENROUTER_API_KEY is not set');
 
-  const res = await fetch(OPENROUTER_API_URL, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://debaterank.app',
-      'X-Title': 'DebateRank',
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      max_tokens: 4000,
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: ANALYSIS_PROMPT(segment, debaterA, debaterB, roundNumber) },
-      ],
-    }),
-  });
+  const messages = [
+    { role: 'system', content: SYSTEM_PROMPT },
+    { role: 'user', content: ANALYSIS_PROMPT(segment, debaterA, debaterB, roundNumber) },
+  ];
 
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`OpenRouter error ${res.status}: ${err}`);
+  let lastError: Error | null = null;
+
+  for (const model of FREE_MODEL_FALLBACKS) {
+    try {
+      const res = await fetch(OPENROUTER_API_URL, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://debaterank.app',
+          'X-Title': 'DebateRank',
+        },
+        body: JSON.stringify({ model, max_tokens: 4000, messages }),
+      });
+
+      if (!res.ok) {
+        const err = await res.text();
+        lastError = new Error(`OpenRouter error ${res.status} (${model}): ${err}`);
+        console.warn(`[claude] Model ${model} failed, trying next...`, lastError.message);
+        continue;
+      }
+
+      const data = await res.json();
+      const text: string = data.choices?.[0]?.message?.content?.trim();
+
+      if (!text) {
+        lastError = new Error(`No text response from model ${model}`);
+        console.warn(`[claude] ${lastError.message}, trying next...`);
+        continue;
+      }
+
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) {
+        lastError = new Error(`Could not extract JSON from ${model} response`);
+        console.warn(`[claude] ${lastError.message}, trying next...`);
+        continue;
+      }
+
+      const analysis: SegmentAnalysis = JSON.parse(jsonMatch[0]);
+      console.log(`[claude] Success with model: ${model}`);
+      return analysis;
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error(String(err));
+      console.warn(`[claude] Model ${model} threw error, trying next...`, lastError.message);
+    }
   }
 
-  const data = await res.json();
-  const text: string = data.choices?.[0]?.message?.content?.trim();
-
-  if (!text) throw new Error('No text response from model');
-
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) throw new Error('Could not extract JSON from response');
-
-  const analysis: SegmentAnalysis = JSON.parse(jsonMatch[0]);
-  return analysis;
+  throw lastError ?? new Error('All free models exhausted');
 }
