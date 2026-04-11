@@ -1,6 +1,9 @@
 const ANDROID_VERSION = '20.10.38';
-const USER_AGENT = `com.google.android.youtube/${ANDROID_VERSION} (Linux; U; Android 14)`;
+const IOS_VERSION = '19.29.1';
+const ANDROID_UA = `com.google.android.youtube/${ANDROID_VERSION} (Linux; U; Android 14)`;
+const IOS_UA = `com.google.ios.youtube/${IOS_VERSION} (iPhone16,2; U; CPU iOS 17_5_1 like Mac OS X)`;
 const WEB_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+const INNERTUBE_URL = 'https://www.youtube.com/youtubei/v1/player?prettyPrint=false';
 
 export function extractVideoId(url: string): string | null {
   if (url.length === 11 && /^[a-zA-Z0-9_-]+$/.test(url)) return url;
@@ -82,14 +85,19 @@ async function fetchTranscriptFromTrack(track: CaptionTrack): Promise<string> {
   return formatTranscript(items);
 }
 
-// Strategy 1: InnerTube ANDROID API (most reliable, bypasses bot checks)
-async function fetchViaInnerTube(videoId: string): Promise<string | null> {
+async function tryInnerTubeClient(
+  videoId: string,
+  clientName: string,
+  clientVersion: string,
+  userAgent: string,
+  extra: Record<string, unknown> = {}
+): Promise<string | null> {
   try {
-    const res = await fetch('https://www.youtube.com/youtubei/v1/player?prettyPrint=false', {
+    const res = await fetch(INNERTUBE_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'User-Agent': USER_AGENT },
+      headers: { 'Content-Type': 'application/json', 'User-Agent': userAgent },
       body: JSON.stringify({
-        context: { client: { clientName: 'ANDROID', clientVersion: ANDROID_VERSION } },
+        context: { client: { clientName, clientVersion, ...extra } },
         videoId,
       }),
     });
@@ -101,6 +109,19 @@ async function fetchViaInnerTube(videoId: string): Promise<string | null> {
   } catch {
     return null;
   }
+}
+
+// Strategy 1: InnerTube — try ANDROID then iOS (both bypass bot checks on cloud IPs)
+async function fetchViaInnerTube(videoId: string): Promise<string | null> {
+  const android = await tryInnerTubeClient(videoId, 'ANDROID', ANDROID_VERSION, ANDROID_UA);
+  if (android) return android;
+
+  return tryInnerTubeClient(videoId, 'IOS', IOS_VERSION, IOS_UA, {
+    deviceMake: 'Apple',
+    deviceModel: 'iPhone16,2',
+    osName: 'iPhone',
+    osVersion: '17.5.1.21F90',
+  });
 }
 
 // Strategy 2: Parse ytInitialPlayerResponse from HTML
