@@ -141,7 +141,7 @@ export default function ArgumentMap({ nodes, edges, debaterA, debaterB }: Argume
           attributionPosition="bottom-right"
           style={{ background: 'var(--background)' }}
         >
-          <Background color="var(--border)" gap={20} size={1} opacity={0.5} />
+          <Background color="var(--border)" gap={20} size={1} />
           <Controls className="!bg-white dark:!bg-[#1a1a1a] !border-stone-200 dark:!border-[#2a2a2a] !shadow-lg rounded-xl overflow-hidden" />
           <MiniMap
             style={{ background: 'var(--card-bg)', border: '1px solid var(--border)', borderRadius: '12px' }}
