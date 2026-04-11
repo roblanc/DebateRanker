@@ -2,9 +2,14 @@ import { NextRequest, NextResponse, after } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 import { ensureDb } from '@/lib/db';
 import { analyzeSegment } from '@/lib/claude';
+import { analyzeYouTubeDebate } from '@/lib/gemini-video';
 import { segmentTranscript, extractTimestamp } from '@/lib/segmenter';
 import { Debate } from '@/types';
 import { Client } from '@libsql/client';
+
+function isYouTubeUrl(str: string): boolean {
+  return /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(str.trim());
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -40,7 +45,11 @@ export async function POST(req: NextRequest) {
     after(async () => {
       console.log(`[Background] Analysis task started for ${debate_id}`);
       try {
-        await analyzeDebate(debate_id, debate, db);
+        if (isYouTubeUrl(debate.transcript)) {
+          await analyzeDebateFromYouTube(debate_id, debate, db);
+        } else {
+          await analyzeDebate(debate_id, debate, db);
+        }
         console.log(`[Background] Analysis completed successfully for ${debate_id}`);
       } catch (err) {
         console.error(`[Background] Analysis failed for ${debate_id}:`, err);
@@ -163,4 +172,94 @@ async function analyzeDebate(debateId: string, debate: Debate, db: Client) {
 
   console.log(`[Background] Finalizing debate status for ${debateId}...`);
   await db.execute({ sql: "UPDATE debates SET status = 'complete' WHERE id = ?", args: [debateId] });
+}
+
+async function analyzeDebateFromYouTube(debateId: string, debate: Debate, db: Client) {
+  console.log(`[Background] Sending YouTube URL to Gemini for ${debateId}...`);
+  const fullAnalysis = await analyzeYouTubeDebate(debate.transcript);
+
+  // Update debater names if Gemini detected them
+  if (fullAnalysis.debater_a_name && fullAnalysis.debater_b_name) {
+    await db.execute({
+      sql: 'UPDATE debates SET debater_a = ?, debater_b = ?, title = ? WHERE id = ?',
+      args: [fullAnalysis.debater_a_name, fullAnalysis.debater_b_name, fullAnalysis.debate_title, debateId],
+    });
+  }
+
+  const nodeIdMap: Map<string, string> = new Map();
+
+  for (const seg of fullAnalysis.segments) {
+    const segmentId = uuidv4();
+    const roundNumber = seg.round_number;
+
+    await db.execute({
+      sql: `INSERT INTO segments (id, debate_id, round_number, topic, content, summary, start_time)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      args: [segmentId, debateId, roundNumber, seg.topic, '', seg.summary, null],
+    });
+
+    const insertScore = async (debater: 'A' | 'B', scoreData: typeof seg.scores.debater_a) => {
+      const total = (
+        scoreData.evidence_score + scoreData.logic_score + scoreData.claim_support_score +
+        scoreData.definition_clarity_score + scoreData.policy_relevance_score +
+        scoreData.rhetorical_composure_score + scoreData.debate_discipline_score +
+        scoreData.framing_control_score
+      ) / 8;
+
+      await db.execute({
+        sql: `INSERT INTO scores (id, segment_id, debater, evidence_score, logic_score,
+              claim_support_score, definition_clarity_score, policy_relevance_score,
+              rhetorical_composure_score, debate_discipline_score, framing_control_score,
+              total_score, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        args: [
+          uuidv4(), segmentId, debater,
+          scoreData.evidence_score, scoreData.logic_score, scoreData.claim_support_score,
+          scoreData.definition_clarity_score, scoreData.policy_relevance_score,
+          scoreData.rhetorical_composure_score, scoreData.debate_discipline_score,
+          scoreData.framing_control_score, Math.round(total * 10) / 10, scoreData.notes || '',
+        ],
+      });
+    };
+
+    await Promise.all([insertScore('A', seg.scores.debater_a), insertScore('B', seg.scores.debater_b)]);
+
+    for (const moment of (seg.moments || [])) {
+      await db.execute({
+        sql: `INSERT INTO moments (id, debate_id, segment_id, type, description, debater, timestamp)
+              VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        args: [uuidv4(), debateId, segmentId, moment.type, moment.description, moment.debater, moment.timestamp || null],
+      });
+    }
+
+    let aCount = 0, bCount = 0;
+    for (const node of (seg.argument_nodes || [])) {
+      const dbId = uuidv4();
+      nodeIdMap.set(`${debateId}-${node.node_id}`, dbId);
+      const xPos = node.debater === 'A' ? 50 + ((roundNumber - 1) * 300) : 350 + ((roundNumber - 1) * 300);
+      const yPos = node.debater === 'A' ? 50 + (aCount++ * 100) : 50 + (bCount++ * 100);
+
+      await db.execute({
+        sql: `INSERT INTO argument_nodes (id, debate_id, segment_id, debater, claim, type, position_x, position_y)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        args: [dbId, debateId, segmentId, node.debater, node.claim, node.type, xPos, yPos],
+      });
+    }
+
+    for (const edge of (seg.argument_edges || [])) {
+      const sourceId = nodeIdMap.get(`${debateId}-${edge.source_node_id}`);
+      const targetId = nodeIdMap.get(`${debateId}-${edge.target_node_id}`);
+      if (sourceId && targetId) {
+        await db.execute({
+          sql: `INSERT INTO argument_edges (id, debate_id, source_node_id, target_node_id, relationship)
+                VALUES (?, ?, ?, ?, ?)`,
+          args: [uuidv4(), debateId, sourceId, targetId, edge.relationship],
+        });
+      }
+    }
+
+    console.log(`[Background] Stored segment ${roundNumber} for ${debateId}`);
+  }
+
+  await db.execute({ sql: "UPDATE debates SET status = 'complete' WHERE id = ?", args: [debateId] });
+  console.log(`[Background] YouTube analysis complete for ${debateId}`);
 }
